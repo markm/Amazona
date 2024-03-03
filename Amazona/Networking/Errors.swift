@@ -7,25 +7,19 @@
 
 import Foundation
 
-enum NetworkError: LocalizedError {
+private let kDefaultRecoverySuggestion = "Try again, or contact help@amazona.com"
+
+enum NetworkingError: LocalizedError {
+    
     case invalidURL
-    case noData
-    case invalidJSON
-    case requestFailed
-    case invalidInput
+    case invalidResponse
     
     var failureReason: String? {
         switch self {
         case .invalidURL:
             return "Invalid URL"
-        case .noData:
-            return "No Data"
-        case .invalidJSON:
-            return "Invalid JSON"
-        case .requestFailed:
-            return "Request Failed"
-        case .invalidInput:
-            return "Invalid Input"
+        case .invalidResponse:
+            return "Invalid Response"
         }
     }
     
@@ -34,7 +28,51 @@ enum NetworkError: LocalizedError {
         case .invalidURL:
             return "Check the URL and try again"
         default:
-            return "Try again, or contact help@foody.com"
+            return kDefaultRecoverySuggestion
+        }
+    }
+}
+
+enum NetworkError: LocalizedError {
+    
+    case unauthorized
+    case resourceNotFound
+    case unknown
+    
+    var failureReason: String? {
+        switch self {
+        case .unauthorized:
+            return "Unauthorized"
+        case .resourceNotFound:
+            return "Resource Not Found"
+        case .unknown:
+            return "Unknown Error"
+        }
+    }
+    
+    var recoverSuggestion: String? {
+        switch self {
+        default:
+            return kDefaultRecoverySuggestion
+        }
+    }
+}
+
+enum SerializationError: LocalizedError {
+    
+    case decodingFailed
+    
+    var failureReason: String? {
+        switch self {
+        case .decodingFailed:
+            return "Failed to Decode"
+        }
+    }
+    
+    var recoverSuggestion: String? {
+        switch self {
+        case .decodingFailed:
+            return "Check the CodingKeys of the model and try again"
         }
     }
 }

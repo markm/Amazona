@@ -21,7 +21,7 @@ extension Endpoint {
 
 extension Endpoint {
     
-    private var host: String { "fakestoreapi.com" } // https://fakestoreapi.com/products/
+    private var host: String { "fakestoreapi.com" }
     
     private var path: String {
         switch self {
