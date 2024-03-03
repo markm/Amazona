@@ -40,12 +40,12 @@ class DiscoverNewProductsViewController: UIViewController {
         )
         
         /// add the title view below it
-        view.addSubview(titleView)
-        titleView.easy.layout(
+        view.addSubview(titleLabel)
+        titleLabel.easy.layout(
             Top(20).to(searchStackView, .bottom),
             Left(20),
             Right(20),
-            Height(50)
+            Height(60)
         )
         
         /// set up the scroll view horizontal pager
@@ -121,11 +121,12 @@ class DiscoverNewProductsViewController: UIViewController {
         return filterButton
     }()
     
-    private let titleView: UITextView = {
-        let titleView = UITextView()
-        titleView.text = "Discover New Products"
-        titleView.font = UIFont.systemFont(ofSize: 24)
-        return titleView
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Discover New Products"
+        label.textColor = .black
+        label.font = UIFont.systemFont(ofSize: 24)
+        return label
     }()
     
     private let scrollView: UIScrollView = {
@@ -196,7 +197,7 @@ class DiscoverNewProductsViewController: UIViewController {
         
         // Add constraints to position the scroll view below the title view
         scrollView.easy.layout(
-            Top().to(titleView, .bottom),
+            Top().to(titleLabel, .bottom),
             Left(20),
             Right(20),
             Bottom(60)
