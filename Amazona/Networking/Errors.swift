@@ -7,8 +7,6 @@
 
 import Foundation
 
-private let kDefaultRecoverySuggestion = "Try again, or contact help@amazona.com"
-
 enum NetworkingError: LocalizedError {
     
     case invalidURL
