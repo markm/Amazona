@@ -51,7 +51,17 @@ class DiscoverNewProductsViewController: UIViewController {
             Top(20).to(stackView, .bottom),
             Left(20),
             Right(20),
-            Height(60)
+            Height(50)
+        )
+        
+        let scrollView = createHorizontalScrollView()
+        scrollView.backgroundColor = .purple
+        view.addSubview(scrollView)
+        scrollView.easy.layout(
+            Top().to(titleView, .bottom),
+            Left(20),
+            Right(20),
+            Bottom(20)
         )
         
         Task {
@@ -129,5 +139,50 @@ class DiscoverNewProductsViewController: UIViewController {
         titleView.font = UIFont.systemFont(ofSize: 24)
         view.addSubview(titleView)
         return titleView
+    }
+    
+    private func createHorizontalScrollView() -> UIScrollView {
+        super.viewDidLoad()
+
+        // Create a UIScrollView
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.isPagingEnabled = true // Enable paging for horizontal scrolling
+        view.addSubview(scrollView)
+        
+        // Add constraints to make the scroll view fill the entire view
+        scrollView.easy.layout(Edges())
+        
+        // Create a contentView to hold the stack view inside the scroll view
+        let contentView = UIView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+        
+        // Add constraints to the contentView to match the size of the scrollView
+        contentView.easy.layout(Edges(), Height().like(scrollView))
+        
+        // Create a UIStackView to hold the subviews horizontally
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        contentView.addSubview(stackView)
+        
+        // Add constraints to make the stack view match the width of the content view
+        stackView.easy.layout(Top(), Bottom(), Width(*5)) // Adjust multiplier according to the number of subviews
+        
+        // Position the stack view within the content view
+        stackView.easy.layout(Left(), Right())
+        
+        // Create and add subviews to the stack view
+        for i in 0..<5 {
+            let subview = UIView()
+            subview.backgroundColor = UIColor(red: CGFloat(i) * 0.2, green: 0.5, blue: 0.7, alpha: 1.0)
+            stackView.addArrangedSubview(subview)
+            
+            // Add constraints for subview's size
+            subview.easy.layout(Height().like(contentView), Width().like(scrollView))
+        }
+        return scrollView
     }
 }
