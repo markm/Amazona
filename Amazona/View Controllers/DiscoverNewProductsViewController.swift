@@ -17,15 +17,12 @@ class DiscoverNewProductsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let stackView = getSearchStackView()
-        view.addSubview(stackView)
+        view.addSubview(searchStackView)
 
-        let textField = createSearchTextField()
-        textField.easy.layout(
+        searchTextField.easy.layout(
             Height(kTextFieldHeight)
         )
         
-        let magnifyingGlassImageView = createMagnifyingGlassImageView()
         magnifyingGlassImageView.easy.layout(
             CenterY(),
             CenterX(),
@@ -33,29 +30,27 @@ class DiscoverNewProductsViewController: UIViewController {
             Height(20)
         )
         
-        textField.leftView = magnifyingGlassImageView
-        textField.leftViewMode = .always
-        stackView.addArrangedSubview(textField)
+        searchTextField.leftView = magnifyingGlassImageView
+        searchTextField.leftViewMode = .always
+        searchStackView.addArrangedSubview(searchTextField)
         
-        let filterButton = createFilterButton()
-        stackView.addArrangedSubview(filterButton)
-        stackView.easy.layout(
+        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        searchStackView.addArrangedSubview(filterButton)
+        searchStackView.easy.layout(
             Top().to(view.safeAreaLayoutGuide, .top),
             Left(20),
             Right(20)
         )
         
-        let titleView = createTitleView()
         view.addSubview(titleView)
         titleView.easy.layout(
-            Top(20).to(stackView, .bottom),
+            Top(20).to(searchStackView, .bottom),
             Left(20),
             Right(20),
             Height(50)
         )
         
         let scrollView = createHorizontalScrollView()
-        scrollView.backgroundColor = .purple
         view.addSubview(scrollView)
         scrollView.easy.layout(
             Top().to(titleView, .bottom),
@@ -99,15 +94,15 @@ class DiscoverNewProductsViewController: UIViewController {
         self.present(alertController, animated: true, completion: nil)
     }
     
-    private func getSearchStackView() -> UIStackView {
+    private let searchStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 10
         stackView.alignment = .center
         return stackView
-    }
+    }()
     
-    private func createSearchTextField() -> UITextField {
+    private let searchTextField: UITextField = {
         let textField = UITextField()
         textField.backgroundColor = .clear
         textField.layer.cornerRadius = kTextFieldHeight / 2
@@ -116,42 +111,44 @@ class DiscoverNewProductsViewController: UIViewController {
         textField.placeholder = "Search"
         textField.textAlignment = .left
         return textField
-    }
+    }()
     
-    private func createMagnifyingGlassImageView() -> UIImageView {
+    private let magnifyingGlassImageView: UIImageView = {
         let magnifyingGlassImageView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
         magnifyingGlassImageView.contentMode = .center
         magnifyingGlassImageView.tintColor = .AmazonaGrey
         return magnifyingGlassImageView
-    }
+    }()
     
-    private func createFilterButton() -> UIButton {
+    private let filterButton: UIButton = {
         let filterButton = UIButton(type: .system)
         filterButton.tintColor = .AmazonaGrey
         filterButton.setImage(UIImage(systemName: "line.3.horizontal.decrease.circle.fill"), for: .normal)
-        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         return filterButton
-    }
+    }()
     
-    private func createTitleView() -> UITextView {
+    private let titleView: UITextView = {
         let titleView = UITextView()
         titleView.text = "Discover New Products"
         titleView.font = UIFont.systemFont(ofSize: 24)
-        view.addSubview(titleView)
         return titleView
-    }
+    }()
     
     private func createHorizontalScrollView() -> UIScrollView {
-        super.viewDidLoad()
-
         // Create a UIScrollView
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.isPagingEnabled = true // Enable paging for horizontal scrolling
+        scrollView.backgroundColor = .clear // Adjust as needed
         view.addSubview(scrollView)
         
-        // Add constraints to make the scroll view fill the entire view
-        scrollView.easy.layout(Edges())
+        // Add constraints to position the scroll view below the title view
+        scrollView.easy.layout(
+            Top().to(titleView, .bottom),
+            Left(20),
+            Right(20),
+            Bottom(20)
+        )
         
         // Create a contentView to hold the stack view inside the scroll view
         let contentView = UIView()
@@ -169,7 +166,7 @@ class DiscoverNewProductsViewController: UIViewController {
         contentView.addSubview(stackView)
         
         // Add constraints to make the stack view match the width of the content view
-        stackView.easy.layout(Top(), Bottom(), Width(*5)) // Adjust multiplier according to the number of subviews
+        stackView.easy.layout(Top(), Bottom(), Width().like(contentView))
         
         // Position the stack view within the content view
         stackView.easy.layout(Left(), Right())
@@ -183,6 +180,8 @@ class DiscoverNewProductsViewController: UIViewController {
             // Add constraints for subview's size
             subview.easy.layout(Height().like(contentView), Width().like(scrollView))
         }
+        
         return scrollView
     }
+
 }
