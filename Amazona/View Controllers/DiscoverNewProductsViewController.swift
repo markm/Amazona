@@ -16,40 +16,16 @@ class DiscoverNewProductsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        Task {
-            do {
-                let products = try await viewModel.fetchProducts()
-                print("products: \(products)")
-            } catch {
-                print("Error: \(error)")
-                showErrorAlert(error)
-            }
-        }
 
-        /// create a horizontal stack view
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 10
-        stackView.alignment = .center
+        let stackView = getSearchStackView()
         view.addSubview(stackView)
 
-        /// create a UITextField
-        let textField = UITextField()
-        textField.backgroundColor = .clear
-        textField.layer.cornerRadius = kTextFieldHeight / 2
-        textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor.AmazonaGrey.cgColor
-        textField.placeholder = "Search"
-        textField.textAlignment = .left
+        let textField = createSearchTextField()
         textField.easy.layout(
             Height(kTextFieldHeight)
         )
         
-        /// create the magnifying class image
-        let magnifyingGlassImageView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
-        magnifyingGlassImageView.contentMode = .center
-        magnifyingGlassImageView.tintColor = .AmazonaGrey
+        let magnifyingGlassImageView = createMagnifyingGlassImageView()
         magnifyingGlassImageView.easy.layout(
             CenterY(),
             CenterX(),
@@ -61,18 +37,32 @@ class DiscoverNewProductsViewController: UIViewController {
         textField.leftViewMode = .always
         stackView.addArrangedSubview(textField)
         
-        /// create the filter button
-        let filterButton = UIButton(type: .system)
-        filterButton.tintColor = .AmazonaGrey
-        filterButton.setImage(UIImage(systemName: "line.3.horizontal.decrease.circle.fill"), for: .normal)
-        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
-        
+        let filterButton = createFilterButton()
         stackView.addArrangedSubview(filterButton)
         stackView.easy.layout(
-            Top(50),
+            Top().to(view.safeAreaLayoutGuide, .top),
             Left(20),
             Right(20)
         )
+        
+        let titleView = createTitleView()
+        view.addSubview(titleView)
+        titleView.easy.layout(
+            Top(20).to(stackView, .bottom),
+            Left(20),
+            Right(20),
+            Height(60)
+        )
+        
+        Task {
+            do {
+                let products = try await viewModel.fetchProducts()
+                print("products: \(products)")
+            } catch {
+                print("Error: \(error)")
+                showErrorAlert(error)
+            }
+        }
     }
     
     @objc private func filterButtonTapped() {
@@ -87,5 +77,47 @@ class DiscoverNewProductsViewController: UIViewController {
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertController.addAction(okAction)
         self.present(alertController, animated: true, completion: nil)
+    }
+    
+    private func getSearchStackView() -> UIStackView {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 10
+        stackView.alignment = .center
+        return stackView
+    }
+    
+    private func createSearchTextField() -> UITextField {
+        let textField = UITextField()
+        textField.backgroundColor = .clear
+        textField.layer.cornerRadius = kTextFieldHeight / 2
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.AmazonaGrey.cgColor
+        textField.placeholder = "Search"
+        textField.textAlignment = .left
+        return textField
+    }
+    
+    private func createMagnifyingGlassImageView() -> UIImageView {
+        let magnifyingGlassImageView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
+        magnifyingGlassImageView.contentMode = .center
+        magnifyingGlassImageView.tintColor = .AmazonaGrey
+        return magnifyingGlassImageView
+    }
+    
+    private func createFilterButton() -> UIButton {
+        let filterButton = UIButton(type: .system)
+        filterButton.tintColor = .AmazonaGrey
+        filterButton.setImage(UIImage(systemName: "line.3.horizontal.decrease.circle.fill"), for: .normal)
+        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        return filterButton
+    }
+    
+    private func createTitleView() -> UITextView {
+        let titleView = UITextView()
+        titleView.text = "Discover New Products"
+        titleView.font = UIFont.systemFont(ofSize: 24)
+        view.addSubview(titleView)
+        return titleView
     }
 }
