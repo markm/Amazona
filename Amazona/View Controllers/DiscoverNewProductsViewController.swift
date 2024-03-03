@@ -18,20 +18,8 @@ class DiscoverNewProductsViewController: UIViewController {
         super.viewDidLoad()
 
         view.addSubview(searchStackView)
-
-        searchTextField.easy.layout(
-            Height(kTextFieldHeight)
-        )
-        
-        magnifyingGlassImageView.easy.layout(
-            CenterY(),
-            CenterX(),
-            Width(40),
-            Height(20)
-        )
         
         searchTextField.leftView = magnifyingGlassImageView
-        searchTextField.leftViewMode = .always
         searchStackView.addArrangedSubview(searchTextField)
         
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
@@ -110,6 +98,10 @@ class DiscoverNewProductsViewController: UIViewController {
         textField.layer.borderColor = UIColor.AmazonaGrey.cgColor
         textField.placeholder = "Search"
         textField.textAlignment = .left
+        textField.leftViewMode = .always
+        textField.easy.layout(
+            Height(kTextFieldHeight)
+        )
         return textField
     }()
     
@@ -117,6 +109,12 @@ class DiscoverNewProductsViewController: UIViewController {
         let magnifyingGlassImageView = UIImageView(image: UIImage(systemName: "magnifyingglass"))
         magnifyingGlassImageView.contentMode = .center
         magnifyingGlassImageView.tintColor = .AmazonaGrey
+        magnifyingGlassImageView.easy.layout(
+            CenterY(),
+            CenterX(),
+            Width(40),
+            Height(20)
+        )
         return magnifyingGlassImageView
     }()
     
@@ -183,7 +181,7 @@ class DiscoverNewProductsViewController: UIViewController {
             subview.easy.layout(Height().like(contentView), Width().like(scrollView))
         }
         
-        /// add the paging indicator 
+        /// add the paging indicator
         view.addSubview(pageControl)
         
         // Add constraints to position the page control below the scroll view
