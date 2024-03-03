@@ -137,9 +137,11 @@ class DiscoverNewProductsViewController: UIViewController {
     private func createHorizontalScrollView() -> UIScrollView {
         // Create a UIScrollView
         let scrollView = UIScrollView()
+        scrollView.delegate = self
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.isPagingEnabled = true // Enable paging for horizontal scrolling
         scrollView.backgroundColor = .clear // Adjust as needed
+        scrollView.showsHorizontalScrollIndicator = false
         view.addSubview(scrollView)
         
         // Add constraints to position the scroll view below the title view
@@ -181,7 +183,35 @@ class DiscoverNewProductsViewController: UIViewController {
             subview.easy.layout(Height().like(contentView), Width().like(scrollView))
         }
         
+        /// add the paging indicator 
+        view.addSubview(pageControl)
+        
+        // Add constraints to position the page control below the scroll view
+        pageControl.easy.layout(
+            Top().to(scrollView, .bottom),
+            CenterX(),
+            Bottom(20)
+        )
+        
         return scrollView
     }
 
+    private let pageControl: UIPageControl = {
+        let pageControl = UIPageControl()
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
+        pageControl.numberOfPages = 5 // Set the number of pages
+        pageControl.currentPage = 0 // Set the initial current page
+        pageControl.pageIndicatorTintColor = .lightGray
+        pageControl.currentPageIndicatorTintColor = .darkGray
+        return pageControl
+    }()
 }
+
+extension DiscoverNewProductsViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Calculate the current page based on the scroll view's content offset and width
+        let currentPage = Int((scrollView.contentOffset.x + scrollView.bounds.width / 2) / scrollView.bounds.width)
+        pageControl.currentPage = currentPage
+    }
+}
+
