@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A03AB91B2B959A870044E3D4 /* ProductCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB91A2B959A870044E3D4 /* ProductCardView.swift */; };
+		A03AB91D2B95AF8E0044E3D4 /* AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB91C2B95AF8E0044E3D4 /* AppFonts.swift */; };
+		A03AB91F2B95BF820044E3D4 /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB91E2B95BF820044E3D4 /* ProductViewController.swift */; };
 		A0AFC2F52B93E4E70004D0E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC2F42B93E4E70004D0E0 /* AppDelegate.swift */; };
 		A0AFC2F72B93E4E70004D0E0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC2F62B93E4E70004D0E0 /* SceneDelegate.swift */; };
 		A0AFC2FE2B93E4E80004D0E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0AFC2FD2B93E4E80004D0E0 /* Assets.xcassets */; };
@@ -48,6 +51,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A03AB91A2B959A870044E3D4 /* ProductCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCardView.swift; sourceTree = "<group>"; };
+		A03AB91C2B95AF8E0044E3D4 /* AppFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFonts.swift; sourceTree = "<group>"; };
+		A03AB91E2B95BF820044E3D4 /* ProductViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductViewController.swift; sourceTree = "<group>"; };
 		A0AFC2F12B93E4E70004D0E0 /* Amazona.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Amazona.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0AFC2F42B93E4E70004D0E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A0AFC2F62B93E4E70004D0E0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -123,6 +129,7 @@
 		A0AFC2F32B93E4E70004D0E0 /* Amazona */ = {
 			isa = PBXGroup;
 			children = (
+				A0AFC34B2B953F0C0004D0E0 /* Views */,
 				A0AFC3432B93F2390004D0E0 /* View Models */,
 				A0AFC3352B93E8340004D0E0 /* View Controllers */,
 				A0AFC33B2B93E8980004D0E0 /* Models */,
@@ -157,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				A0AFC3362B93E85A0004D0E0 /* DiscoverNewProductsViewController.swift */,
+				A03AB91E2B95BF820044E3D4 /* ProductViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -185,6 +193,7 @@
 				A0AFC2F42B93E4E70004D0E0 /* AppDelegate.swift */,
 				A0AFC2F62B93E4E70004D0E0 /* SceneDelegate.swift */,
 				A0AFC3462B9403E90004D0E0 /* Constants.swift */,
+				A03AB91C2B95AF8E0044E3D4 /* AppFonts.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -203,6 +212,14 @@
 				A0AFC3492B940AA00004D0E0 /* UIColor+CustomColors.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A0AFC34B2B953F0C0004D0E0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A03AB91A2B959A870044E3D4 /* ProductCardView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -349,12 +366,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A03AB91F2B95BF820044E3D4 /* ProductViewController.swift in Sources */,
 				A0AFC33F2B93E8C60004D0E0 /* Endpoint.swift in Sources */,
 				A0AFC2F52B93E4E70004D0E0 /* AppDelegate.swift in Sources */,
+				A03AB91D2B95AF8E0044E3D4 /* AppFonts.swift in Sources */,
 				A0AFC3372B93E85A0004D0E0 /* DiscoverNewProductsViewController.swift in Sources */,
 				A0AFC3412B93E8DF0004D0E0 /* Errors.swift in Sources */,
 				A0AFC2F72B93E4E70004D0E0 /* SceneDelegate.swift in Sources */,
 				A0AFC33A2B93E8820004D0E0 /* ProductService.swift in Sources */,
+				A03AB91B2B959A870044E3D4 /* ProductCardView.swift in Sources */,
 				A0AFC34A2B940AA00004D0E0 /* UIColor+CustomColors.swift in Sources */,
 				A0AFC3452B93F2750004D0E0 /* DiscoverNewProductsViewModel.swift in Sources */,
 				A0AFC33D2B93E8A40004D0E0 /* Product.swift in Sources */,
