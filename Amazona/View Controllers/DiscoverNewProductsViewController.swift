@@ -11,6 +11,7 @@ import EasyPeasy
 
 class DiscoverNewProductsViewController: UIViewController {
     
+    private var products: [Product] = []
     private let viewModel = DiscoverNewProductsViewModel()
     private let disposeBag = DisposeBag()
 
@@ -67,23 +68,25 @@ class DiscoverNewProductsViewController: UIViewController {
             return Disposables.create()
         }
 
-        /// Subscribe to the observable
+        /// subscribe to the observable
         observable
             .subscribe(onNext: { products in
-                print("Products: \(products)")
-                /// React to the products here
-                
-                self.pageControl.numberOfPages = products.count /// Set the number of pages
-                
+                self.products = products
+                self.pageControl.numberOfPages = products.count
                 for product in products {
                     let productCardView = ProductCardView(product: product)
                     productCardView.layer.cornerRadius = 20
                     productCardView.contentMode = .scaleAspectFit
+                    productCardView.isUserInteractionEnabled = true
                     self.stackView.addArrangedSubview(productCardView)
                     productCardView.easy.layout(
                         Height().like(self.contentView),
-                        Width(-8).like(self.scrollView)
+                        Width(-5).like(self.scrollView)
                     )
+                    let tapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                                                      action: #selector(self.productCardTapped(_:)))
+                    productCardView.addGestureRecognizer(tapGestureRecognizer)
+                    productCardView.tag = product.id
                 }
             }, onError: { error in
                 print("Error: \(error)")
@@ -151,8 +154,8 @@ class DiscoverNewProductsViewController: UIViewController {
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.isPagingEnabled = true // Enable paging for horizontal scrolling
-        scrollView.backgroundColor = .clear // Adjust as needed
+        scrollView.isPagingEnabled = true
+        scrollView.backgroundColor = .clear
         scrollView.showsHorizontalScrollIndicator = false
         return scrollView
     }()
@@ -186,6 +189,14 @@ class DiscoverNewProductsViewController: UIViewController {
     @objc private func filterButtonTapped() {
         // Handle filter button tap
     }
+    
+    @objc private func productCardTapped(_ recognizer: UITapGestureRecognizer) {
+        guard let cardView = recognizer.view else { return }
+        let productIndex = cardView.tag
+        let product = products[productIndex]
+        let productViewController = ProductViewController(product: product)
+        navigationController?.pushViewController(productViewController, animated: true)
+    }
 
     private func showErrorAlert(_ error: Error) {
         let alertController = UIAlertController(title: "Error",
@@ -202,6 +213,13 @@ class DiscoverNewProductsViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.addSubview(stackView)
         
+        scrollView.easy.layout(
+            Top(20).to(titleLabel, .bottom),
+            Left(20),
+            Right(20),
+            Height(500)
+        )
+        
         contentView.easy.layout(
             Edges(),
             Height().like(scrollView)
@@ -212,23 +230,16 @@ class DiscoverNewProductsViewController: UIViewController {
             Width().like(contentView)
         )
         stackView.easy.layout(
-            Left(),
-            Right(),
+            Leading(),
+            Trailing(),
             CenterY().to(contentView)
         )
         
         view.addSubview(pageControl)
-        
-        scrollView.easy.layout(
-            Top(20).to(titleLabel, .bottom),
-            Left(20),
-            Right(20),
-            Bottom(60)
-        )
         pageControl.easy.layout(
             Top(8).to(scrollView, .bottom),
             CenterX(),
-            Bottom(30)
+            Height(40)
         )
     }
 }
