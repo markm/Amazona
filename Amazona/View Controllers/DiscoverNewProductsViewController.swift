@@ -13,8 +13,9 @@ class DiscoverNewProductsViewController: UIViewController {
     
     private let viewModel = DiscoverNewProductsViewModel()
     private let disposeBag = DisposeBag()
-    private let products: [Product] = []
 
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,8 +44,8 @@ class DiscoverNewProductsViewController: UIViewController {
         view.addSubview(titleLabel)
         titleLabel.easy.layout(
             Top(20).to(searchStackView, .bottom),
-            Left(20),
-            Right(20),
+            Leading(20),
+            Trailing(20),
             Height(60)
         )
         
@@ -52,15 +53,43 @@ class DiscoverNewProductsViewController: UIViewController {
         view.addSubview(scrollView)
         setupScrollView()
         
-        Task {
-            do {
-                let products = try await viewModel.fetchProducts()
-                print("products: \(products)")
-            } catch {
-                print("Error: \(error)")
-                showErrorAlert(error)
+        /// Convert async operation to Observable
+        let observable = Observable<[Product]>.create { observer in
+            Task {
+                do {
+                    let products = try await self.viewModel.fetchProducts()
+                    observer.onNext(products)
+                    observer.onCompleted()
+                } catch {
+                    observer.onError(error)
+                }
             }
+            return Disposables.create()
         }
+
+        /// Subscribe to the observable
+        observable
+            .subscribe(onNext: { products in
+                print("Products: \(products)")
+                /// React to the products here
+                
+                self.pageControl.numberOfPages = products.count /// Set the number of pages
+                
+                for product in products {
+                    let productCardView = ProductCardView(product: product)
+                    productCardView.layer.cornerRadius = 20
+                    productCardView.contentMode = .scaleAspectFit
+                    self.stackView.addArrangedSubview(productCardView)
+                    productCardView.easy.layout(
+                        Height().like(self.contentView),
+                        Width(-8).like(self.scrollView)
+                    )
+                }
+            }, onError: { error in
+                print("Error: \(error)")
+                self.showErrorAlert(error)
+            })
+            .disposed(by: disposeBag)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,19 +102,7 @@ class DiscoverNewProductsViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
-    @objc private func filterButtonTapped() {
-        // Handle filter button tap
-    }
-
-    // Function to display an alert with the error message
-    private func showErrorAlert(_ error: Error) {
-        let alertController = UIAlertController(title: "Error",
-                                                message: error.localizedDescription,
-                                                preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alertController.addAction(okAction)
-        self.present(alertController, animated: true, completion: nil)
-    }
+    // MARK: - Views
     
     private let searchStackView: UIStackView = {
         let stackView = UIStackView()
@@ -122,11 +139,13 @@ class DiscoverNewProductsViewController: UIViewController {
     }()
     
     private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Discover New Products"
-        label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 24)
-        return label
+        let titleLabel = UILabel()
+        titleLabel.text = "Discover New Products"
+        titleLabel.textColor = .black
+        titleLabel.font = AppFonts.helveticaNeue(ofSize: 26)
+        titleLabel.numberOfLines = 0
+        titleLabel.lineBreakMode = .byWordWrapping
+        return titleLabel
     }()
     
     private let scrollView: UIScrollView = {
@@ -138,78 +157,11 @@ class DiscoverNewProductsViewController: UIViewController {
         return scrollView
     }()
     
-    private func setupScrollView() {
-        scrollView.delegate = self
-        view.addSubview(scrollView)
-        
-        // Create a contentView to hold the stack view inside the scroll view
+    private let contentView: UIView = {
         let contentView = UIView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(contentView)
-        
-        // Add constraints to the contentView to match the size of the scrollView
-        contentView.easy.layout(Edges(), Height().like(scrollView))
-        
-        // Create a UIStackView to hold the subviews horizontally
-        contentView.addSubview(stackView)
-        
-        // Add constraints to make the stack view match the width of the content view
-        stackView.easy.layout(Top(), Bottom(), Width().like(contentView))
-        
-        // Position the stack view within the content view
-        stackView.easy.layout(Left(), Right(), CenterY().to(contentView))
-        
-        /*
-        var previousCardView: UIView?
-        for _ in 0..<5 {
-            let productCardView = ProductCardView()
-            productCardView.translatesAutoresizingMaskIntoConstraints = false
-            stackView.addArrangedSubview(productCardView)
-            
-            // Constrain product card's width
-            productCardView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -20).isActive = true
-            // Add spacing to the leading edge of the first card and trailing edge of the last card
-            if let previousCardView = previousCardView {
-                productCardView.leadingAnchor.constraint(equalTo: previousCardView.trailingAnchor, constant: 10).isActive = true
-            }
-            
-            previousCardView = productCardView
-        }
-         */
-        
-        // Create and add subviews to the stack view
-        for i in 0..<5 {
-            let productCardView = ProductCardView()
-            productCardView.backgroundColor = UIColor(red: CGFloat(i) * 0.2, green: 0.5, blue: 0.7, alpha: 1.0)
-            productCardView.layer.cornerRadius = 20
-            productCardView.contentMode = .scaleAspectFit
-            stackView.addArrangedSubview(productCardView)
-            
-            // Add constraints for product card's size
-            productCardView.easy.layout(
-                Height().like(contentView),
-                Width(-8).like(scrollView)
-            )
-        }
-        
-        /// add the paging indicator
-        view.addSubview(pageControl)
-        
-        // Add constraints to position the scroll view below the title view
-        scrollView.easy.layout(
-            Top().to(titleLabel, .bottom),
-            Left(20),
-            Right(20),
-            Bottom(60)
-        )
-        
-        // Add constraints to position the page control below the scroll view
-        pageControl.easy.layout(
-            Top(8).to(scrollView, .bottom),
-            CenterX(),
-            Bottom(30)
-        )
-    }
+        return contentView
+    }()
     
     private let stackView: UIStackView = {
         let stackView = UIStackView()
@@ -223,67 +175,67 @@ class DiscoverNewProductsViewController: UIViewController {
     private let pageControl: UIPageControl = {
         let pageControl = UIPageControl()
         pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.numberOfPages = 5 // Set the number of pages
-        pageControl.currentPage = 0 // Set the initial current page
+        pageControl.currentPage = 0
         pageControl.pageIndicatorTintColor = .lightGray
         pageControl.currentPageIndicatorTintColor = .darkGray
         return pageControl
     }()
     
-    private func addProductCards() {
-        var previousCardView: UIView?
+    // MARK: - Actions & Helpers
+    
+    @objc private func filterButtonTapped() {
+        // Handle filter button tap
+    }
 
-        // Assuming products is an array of product data
-        for product in products {
-            let productCardView = ProductCardView()
-            productCardView.configure(with: product) // Configure product card with product data
-            
-            // Add product card view as subview
-            scrollView.addSubview(productCardView)
-            productCardView.translatesAutoresizingMaskIntoConstraints = false
-
-            // Add constraints to position product card view horizontally
-            NSLayoutConstraint.activate([
-                productCardView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-                productCardView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-                productCardView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
-                productCardView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
-            ])
-
-            if let previousCardView = previousCardView {
-                // If there's a previous card, position the current card next to it
-                productCardView.leadingAnchor.constraint(equalTo: previousCardView.trailingAnchor).isActive = true
-            } else {
-                // If this is the first card, position it at the leading edge of the scroll view
-                productCardView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor).isActive = true
-            }
-
-            // Update the previous card view reference
-            previousCardView = productCardView
-        }
-
-        // Add trailing constraint to the last card to ensure proper scrolling
-        if let lastCardView = previousCardView {
-            lastCardView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor).isActive = true
-        }
+    private func showErrorAlert(_ error: Error) {
+        let alertController = UIAlertController(title: "Error",
+                                                message: error.localizedDescription,
+                                                preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    private func setupScrollView() {
+        scrollView.delegate = self
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(stackView)
+        
+        contentView.easy.layout(
+            Edges(),
+            Height().like(scrollView)
+        )
+        stackView.easy.layout(
+            Top(),
+            Bottom(),
+            Width().like(contentView)
+        )
+        stackView.easy.layout(
+            Left(),
+            Right(),
+            CenterY().to(contentView)
+        )
+        
+        view.addSubview(pageControl)
+        
+        scrollView.easy.layout(
+            Top(20).to(titleLabel, .bottom),
+            Left(20),
+            Right(20),
+            Bottom(60)
+        )
+        pageControl.easy.layout(
+            Top(8).to(scrollView, .bottom),
+            CenterX(),
+            Bottom(30)
+        )
     }
 }
 
 extension DiscoverNewProductsViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        /// Calculate the current page based on the scroll view's content offset and width
-        let currentPage = Int((scrollView.contentOffset.x + scrollView.bounds.width / 2) / scrollView.bounds.width)
-        pageControl.currentPage = currentPage
-    }
-}
-
-class ProductCardView: UIView {
-    // Define UI elements for product card, e.g., image view, labels, etc.
-    
-    func configure(with product: Product) {
-        // Use product data to update UI elements, e.g., set image, labels, etc.
-        
-        
+        pageControl.currentPage = Int(scrollView.contentOffset.x / scrollView.bounds.width)
     }
 }
 
