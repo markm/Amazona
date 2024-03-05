@@ -27,10 +27,13 @@ class ProductCardView: UIView {
         addSubview(imageView)
         addSubview(titleLabel)
         addSubview(subtitleLabel)
-        addSubview(ratingLabel)
+        addSubview(ratingStackView)
         
         bottomStackView.addArrangedSubview(categoryContainerView)
         bottomStackView.addArrangedSubview(priceLabel)
+        ratingStackView.addArrangedSubview(ratingStarImageView)
+        ratingStackView.addArrangedSubview(ratingLabel)
+        ratingStackView.addArrangedSubview(ratingCountLabel)
         
         addSubview(bottomStackView)
         categoryContainerView.addSubview(categoryLabel)
@@ -50,7 +53,7 @@ class ProductCardView: UIView {
         layer.shadowOffset = CGSize(width: 0, height: 2)
         layer.shadowRadius = 5
         layer.cornerRadius = kCornerRadius
-        layer.masksToBounds = false // Important for shadows
+        layer.masksToBounds = false /// Important for shadows
     }
     
     private func layoutViews() {
@@ -73,7 +76,7 @@ class ProductCardView: UIView {
             Trailing(kMediumPadding)
         )
         
-        ratingLabel.easy.layout(
+        ratingStackView.easy.layout(
             Top(kSmallPadding).to(subtitleLabel, .bottom),
             Leading(kMediumPadding)
         )
@@ -81,7 +84,7 @@ class ProductCardView: UIView {
         bottomStackView.easy.layout(
             Bottom(kSmallPadding).to(safeAreaLayoutGuide, .bottom),
             Leading(kSmallPadding),
-            Trailing(kMediumPadding)
+            Trailing(kSmallPadding)
         )
         
         categoryContainerView.easy.layout(
@@ -102,7 +105,8 @@ class ProductCardView: UIView {
         titleLabel.text = product.title
         priceLabel.text = "\(product.price.formatted(.currency(code: "EUR")))"
         subtitleLabel.text = product.descriptionText
-        ratingLabel.text = "Rating: \(product.rating?.rate ?? 0)"
+        ratingLabel.text = "\(product.rating?.rate ?? 0)"
+        ratingCountLabel.text = "(\(product.rating?.count ?? 0) ratings)"
         categoryLabel.text = product.category
         /// Load image from URL
         if let imageURL = URL(string: product.imageURLString) {
@@ -158,6 +162,33 @@ class ProductCardView: UIView {
         ratingLabel.font = AppFonts.helveticaNeue(ofSize: 16)
         ratingLabel.textColor = .black
         return ratingLabel
+    }()
+    
+    private let ratingCountLabel: UILabel = {
+        let ratingLabel = UILabel()
+        ratingLabel.font = AppFonts.helveticaNeue(ofSize: 16)
+        ratingLabel.textColor = .gray
+        return ratingLabel
+    }()
+    
+    private let ratingStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = kSmallPadding
+        stackView.distribution = .fill
+        stackView.alignment = .center
+        return stackView
+    }()
+    
+    private let ratingStarImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = kCornerRadius
+        imageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        imageView.image = UIImage(systemName: "star.fill")
+        imageView.tintColor = .AmazonaDeepYellow
+        return imageView
     }()
     
     private let categoryLabel: UILabel = {

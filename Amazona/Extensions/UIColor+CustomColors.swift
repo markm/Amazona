@@ -20,4 +20,8 @@ extension UIColor {
     static var AmazonaDarkBlue: UIColor {
         UIColor(red: 0x26 / 255.0, green: 0x31 / 255.0, blue: 0x5F / 255.0, alpha: 1.0)
     }
+    
+    static var AmazonaDeepYellow: UIColor {
+        UIColor(red: 250 / 255.0, green: 197 / 255.0, blue: 44 / 255.0, alpha: 1.0)
+     }
 }

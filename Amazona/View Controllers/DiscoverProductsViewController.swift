@@ -200,14 +200,12 @@ class DiscoverProductsViewController: UIViewController {
     }
     
     private func setupSearchTextField() {
-        searchTextField.backgroundColor = .clear
         searchTextField.layer.cornerRadius = kSearchTextFieldHeight / 2
         searchTextField.layer.borderWidth = 1
         searchTextField.layer.borderColor = UIColor.AmazonaGrey.cgColor
         searchTextField.placeholder = "Search"
         searchTextField.textAlignment = .left
         searchTextField.leftViewMode = .always
-        searchTextField.borderStyle = .roundedRect
         searchTextField.delegate = self
         addDoneButtonToSearchKeyboard()
     }
