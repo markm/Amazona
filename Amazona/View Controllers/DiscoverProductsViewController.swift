@@ -12,9 +12,10 @@ import RxSwift
 class DiscoverProductsViewController: UIViewController {
     
     private var products: [Product] = []
+    private var cardWidth: CGFloat = 0 /// Card width will be set based on the scrollView's width
+    
     private let viewModel = DiscoverNewProductsViewModel()
     private let disposeBag = DisposeBag()
-    private var cardWidth: CGFloat = 0 // Card width will be set based on the scrollView's width
 
     /// UI Components
     private let scrollView = UIScrollView()
@@ -24,6 +25,7 @@ class DiscoverProductsViewController: UIViewController {
     private let searchTextField = UITextField()
     private let filterButton = UIButton()
     private let magnifyingGlassImageView = UIImageView()
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
 
     // MARK: - Lifecycle
     
@@ -32,6 +34,7 @@ class DiscoverProductsViewController: UIViewController {
         setupViews()
         layoutViews()
         configureScrollView()
+        setupActivityIndicator()
         fetchProducts()
     }
     
@@ -61,6 +64,7 @@ class DiscoverProductsViewController: UIViewController {
         view.addSubview(scrollView)
         view.addSubview(titleLabel)
         view.addSubview(pageControl)
+        view.addSubview(activityIndicator)
         
         /// Set the initial content offset to zero to start with the first card centered
         DispatchQueue.main.async {
@@ -108,6 +112,8 @@ class DiscoverProductsViewController: UIViewController {
         /// make sure the UI is starting from scratch
         scrollView.subviews.forEach { $0.removeFromSuperview() }
         
+        activityIndicator.startAnimating()
+        
         /// create the observable to fetch the products
         let observable = Observable<[Product]>.create { observer in
             Task {
@@ -129,9 +135,11 @@ class DiscoverProductsViewController: UIViewController {
                 self.pageControl.numberOfPages = products.count
                 self.configureScrollView()
                 self.layoutProductCards()
+                self.activityIndicator.stopAnimating()
             }, onError: { error in
                 print("Error: \(error)")
                 self.showErrorAlert(error)
+                self.activityIndicator.stopAnimating()
             })
             .disposed(by: disposeBag)
     }
@@ -225,7 +233,7 @@ class DiscoverProductsViewController: UIViewController {
     private func setupTitleLabel() {
         titleLabel.text = "Discover New Products"
         titleLabel.textColor = .black
-        titleLabel.font = AppFonts.helveticaNeue(ofSize: 26)
+        titleLabel.font = AppFonts.helveticaNeue(ofSize: 26, weight: .bold)
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
     }
@@ -235,6 +243,11 @@ class DiscoverProductsViewController: UIViewController {
         pageControl.currentPage = 0
         pageControl.pageIndicatorTintColor = .lightGray
         pageControl.currentPageIndicatorTintColor = .darkGray
+    }
+    
+    private func setupActivityIndicator() {
+        activityIndicator.center = view.center
+        activityIndicator.color = UIColor.AmazonaMagenta
     }
     
     // MARK: - Actions & Helpers
