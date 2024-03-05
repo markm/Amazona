@@ -14,11 +14,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        /// Create a new UIWindow
+        /// Set up the window and root view controller
         window = UIWindow(windowScene: windowScene)
         let navController = UINavigationController()
-        let mainView = DiscoverProductsViewController()
-        navController.viewControllers = [mainView]
+        let discoverProductsViewController = DiscoverProductsViewController()
+        navController.viewControllers = [discoverProductsViewController]
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
         window?.backgroundColor = .white

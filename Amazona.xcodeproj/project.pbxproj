@@ -129,9 +129,9 @@
 		A0AFC2F32B93E4E70004D0E0 /* Amazona */ = {
 			isa = PBXGroup;
 			children = (
+				A0AFC3352B93E8340004D0E0 /* View Controllers */,
 				A0AFC34B2B953F0C0004D0E0 /* Views */,
 				A0AFC3432B93F2390004D0E0 /* View Models */,
-				A0AFC3352B93E8340004D0E0 /* View Controllers */,
 				A0AFC33B2B93E8980004D0E0 /* Models */,
 				A0AFC3382B93E8730004D0E0 /* Networking */,
 				A0AFC3482B940A660004D0E0 /* Extensions */,
@@ -163,8 +163,8 @@
 		A0AFC3352B93E8340004D0E0 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				A03AB91E2B95BF820044E3D4 /* ProductViewController.swift */,
 				A096472F2B967B2C004D8A60 /* DiscoverProductsViewController.swift */,
+				A03AB91E2B95BF820044E3D4 /* ProductViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";

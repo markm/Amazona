@@ -16,6 +16,7 @@ class ProductCardView: UIView {
         configureCardBorder()
         layoutViews()
         configure(with: product)
+        backgroundColor = .white
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -27,10 +28,12 @@ class ProductCardView: UIView {
         addSubview(titleLabel)
         addSubview(subtitleLabel)
         addSubview(ratingLabel)
-        addSubview(freeTagView)
-        addSubview(priceLabel)
-        freeTagView.addSubview(freeTagLabel)
-        backgroundColor = .white
+        
+        bottomStackView.addArrangedSubview(categoryContainerView)
+        bottomStackView.addArrangedSubview(priceLabel)
+        
+        addSubview(bottomStackView)
+        categoryContainerView.addSubview(categoryLabel)
     }
     
     override func layoutSubviews() {
@@ -55,7 +58,7 @@ class ProductCardView: UIView {
             Top(kMediumPadding),
             Leading(kMediumPadding),
             Trailing(kMediumPadding),
-            Height(*0.6).like(self)
+            Height(*0.55).like(self)
         )
         
         titleLabel.easy.layout(
@@ -75,28 +78,32 @@ class ProductCardView: UIView {
             Leading(kMediumPadding)
         )
         
-        freeTagView.easy.layout(
-            Leading(kMediumPadding),
-            Bottom(kMediumPadding),
-            Width(50),
-            Height(kMediumPadding)
+        bottomStackView.easy.layout(
+            Bottom(kSmallPadding).to(safeAreaLayoutGuide, .bottom),
+            Leading(kSmallPadding),
+            Trailing(kMediumPadding)
         )
         
-        freeTagLabel.easy.layout(
+        categoryContainerView.easy.layout(
+            Height().like(bottomStackView),
+            Width(*0.5).like(bottomStackView)
+        )
+        
+        categoryLabel.easy.layout(
             Center()
         )
         
         priceLabel.easy.layout(
-            Bottom(kMediumPadding),
-            Trailing(kMediumPadding)
+            Height().like(bottomStackView)
         )
     }
     
     private func configure(with product: Product) {
         titleLabel.text = product.title
-        priceLabel.text = "Price: $\(product.price)"
+        priceLabel.text = "\(product.price.formatted(.currency(code: "EUR")))"
         subtitleLabel.text = product.descriptionText
         ratingLabel.text = "Rating: \(product.rating?.rate ?? 0)"
+        categoryLabel.text = product.category
         /// Load image from URL
         if let imageURL = URL(string: product.imageURLString) {
             URLSession.shared.dataTask(with: imageURL) { (data, _, error) in
@@ -133,39 +140,49 @@ class ProductCardView: UIView {
         let subtitleLabel = UILabel()
         subtitleLabel.font = AppFonts.helveticaNeue(ofSize: 14)
         subtitleLabel.textColor = .darkGray
-        subtitleLabel.numberOfLines = 3
+        subtitleLabel.numberOfLines = 2
         subtitleLabel.lineBreakMode = .byWordWrapping
         return subtitleLabel
     }()
     
     private let priceLabel: UILabel = {
         let priceLabel = UILabel()
-        priceLabel.font = AppFonts.helveticaNeue(ofSize: kMediumPadding, weight: .bold)
-        priceLabel.textColor = .red
+        priceLabel.font = AppFonts.helveticaNeue(ofSize: 24, weight: .bold)
+        priceLabel.textColor = .black
+        priceLabel.textAlignment = .right
         return priceLabel
     }()
     
     private let ratingLabel: UILabel = {
         let ratingLabel = UILabel()
-        ratingLabel.font = AppFonts.helveticaNeue(ofSize: 14)
+        ratingLabel.font = AppFonts.helveticaNeue(ofSize: 16)
         ratingLabel.textColor = .black
         return ratingLabel
     }()
     
-    private let freeTagLabel: UILabel = {
-       let freeTagLabel = UILabel()
-        freeTagLabel.text = "Free"
-        freeTagLabel.textColor = .white
-        freeTagLabel.font = AppFonts.helveticaNeue(ofSize: 12)
-        freeTagLabel.textAlignment = .center
-        return freeTagLabel
+    private let categoryLabel: UILabel = {
+       let categoryLabel = UILabel()
+        categoryLabel.textColor = .white
+        categoryLabel.font = AppFonts.helveticaNeue(ofSize: 16)
+        categoryLabel.textAlignment = .center
+        return categoryLabel
     }()
     
-    private let freeTagView: UIView = {
-        let freeTagView = UIView()
-        freeTagView.backgroundColor = .green
-        freeTagView.layer.cornerRadius = kCornerRadius
-        return freeTagView
+    private let categoryContainerView: UIView = {
+        let categoryContainerView = UIView()
+        categoryContainerView.backgroundColor = .AmazonaMagenta
+        categoryContainerView.layer.cornerRadius = 14
+        categoryContainerView.clipsToBounds = true
+        return categoryContainerView
+    }()
+    
+    private let bottomStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = kSmallPadding
+        stackView.distribution = .fill
+        stackView.alignment = .center
+        return stackView
     }()
 }
 
