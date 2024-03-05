@@ -75,15 +75,15 @@ class DiscoverProductsViewController: UIViewController {
             Trailing(kMediumPadding)
         )
         searchTextField.easy.layout(
-            Height(kTextFieldHeight)
+            Height(kSearchTextFieldHeight)
         )
         magnifyingGlassImageView.easy.layout(
             Width(40),
             Height(40)
         )
         filterButton.easy.layout(
-            Width(40),
-            Height(40)
+            Width(kSearchTextFieldHeight),
+            Height(kSearchTextFieldHeight)
         )
         titleLabel.easy.layout(
             Top(kMediumPadding).to(searchStackView, .bottom),
@@ -93,8 +93,8 @@ class DiscoverProductsViewController: UIViewController {
         )
         scrollView.easy.layout(
             Top(kSmallPadding).to(titleLabel, .bottom),
-            Leading(0),
-            Trailing(0)
+            Leading(),
+            Trailing()
         )
         pageControl.easy.layout(
             Top(kSmallPadding).to(scrollView, .bottom),
@@ -193,12 +193,15 @@ class DiscoverProductsViewController: UIViewController {
     
     private func setupSearchTextField() {
         searchTextField.backgroundColor = .clear
-        searchTextField.layer.cornerRadius = kTextFieldHeight / 2
+        searchTextField.layer.cornerRadius = kSearchTextFieldHeight / 2
         searchTextField.layer.borderWidth = 1
         searchTextField.layer.borderColor = UIColor.AmazonaGrey.cgColor
         searchTextField.placeholder = "Search"
         searchTextField.textAlignment = .left
         searchTextField.leftViewMode = .always
+        searchTextField.borderStyle = .roundedRect
+        searchTextField.delegate = self
+        addDoneButtonToSearchKeyboard()
     }
     
     private func setupMagnifyingGlassImageView() {
@@ -247,6 +250,39 @@ class DiscoverProductsViewController: UIViewController {
         let productViewController = ProductViewController(product: product)
         navigationController?.pushViewController(productViewController, animated: true)
     }
+    
+    @objc func doneButtonAction() {
+        searchTextField.resignFirstResponder()
+    }
+    
+    func addDoneButtonToSearchKeyboard() {
+        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect.init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
+        
+        /// Customize the toolbar appearance
+        doneToolbar.barStyle = .default
+        doneToolbar.barTintColor = UIColor.darkGray /// Background color
+        doneToolbar.tintColor = UIColor.white /// Tint color of the button
+
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        
+        let doneBarButton: UIBarButtonItem = UIBarButtonItem(title: "Done",
+                                                             style: .done,
+                                                             target: self,
+                                                             action: #selector(self.doneButtonAction))
+        
+        /// Set custom font and color for the "Done" button
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: AppFonts.helveticaNeue(ofSize: 16),
+            .foregroundColor: UIColor.white
+        ]
+        doneBarButton.setTitleTextAttributes(attributes, for: .normal)
+        doneBarButton.setTitleTextAttributes(attributes, for: .highlighted)
+
+        let items = [flexSpace, doneBarButton]
+        doneToolbar.items = items
+        doneToolbar.sizeToFit()
+        searchTextField.inputAccessoryView = doneToolbar
+    }
 
     private func showErrorAlert(_ error: Error) {
         let alertController = UIAlertController(title: "Error",
@@ -267,6 +303,16 @@ extension DiscoverProductsViewController: UIScrollViewDelegate {
         let fractionalPage = scrollView.contentOffset.x / pageWidth
         let page = lround(Double(fractionalPage)) /// Round to the nearest whole number to get the current page
         pageControl.currentPage = page
+    }
+}
+
+// MARK: - UITextFieldDelegate
+
+extension DiscoverProductsViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
 

@@ -9,7 +9,7 @@ import Foundation
 
 let kDefaultRecoverySuggestion = "Try again, or contact help@amazona.com"
 
-let kTextFieldHeight = CGFloat(44)
 let kSmallPadding = CGFloat(8)
 let kMediumPadding = CGFloat(16)
 let kCornerRadius = CGFloat(16)
+let kSearchTextFieldHeight = CGFloat(44)
