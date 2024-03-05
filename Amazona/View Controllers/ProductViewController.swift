@@ -5,8 +5,8 @@
 //  Created by Mark Mckelvie on 3/4/24.
 //
 
-import Foundation
 import UIKit
+import EasyPeasy
 
 class ProductViewController: UIViewController {
     
@@ -23,5 +23,20 @@ class ProductViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.title = product.title
+        
+        let label = UILabel()
+        label.text = product.title
+        view.addSubview(label)
+        label.easy.layout(
+            CenterX(),
+            CenterY()
+        )
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
 }

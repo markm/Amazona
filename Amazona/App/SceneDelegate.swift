@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         /// Create a new UIWindow
         window = UIWindow(windowScene: windowScene)
         let navController = UINavigationController()
-        let mainView = DiscoverNewProductsViewController()
+        let mainView = DiscoverProductsViewController()
         navController.viewControllers = [mainView]
         window?.rootViewController = navController
         window?.makeKeyAndVisible()

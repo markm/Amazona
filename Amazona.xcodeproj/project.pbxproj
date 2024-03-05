@@ -10,6 +10,7 @@
 		A03AB91B2B959A870044E3D4 /* ProductCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB91A2B959A870044E3D4 /* ProductCardView.swift */; };
 		A03AB91D2B95AF8E0044E3D4 /* AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB91C2B95AF8E0044E3D4 /* AppFonts.swift */; };
 		A03AB91F2B95BF820044E3D4 /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB91E2B95BF820044E3D4 /* ProductViewController.swift */; };
+		A09647302B967B2C004D8A60 /* DiscoverProductsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A096472F2B967B2C004D8A60 /* DiscoverProductsViewController.swift */; };
 		A0AFC2F52B93E4E70004D0E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC2F42B93E4E70004D0E0 /* AppDelegate.swift */; };
 		A0AFC2F72B93E4E70004D0E0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC2F62B93E4E70004D0E0 /* SceneDelegate.swift */; };
 		A0AFC2FE2B93E4E80004D0E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0AFC2FD2B93E4E80004D0E0 /* Assets.xcassets */; };
@@ -23,7 +24,6 @@
 		A0AFC32F2B93E6FD0004D0E0 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = A0AFC32E2B93E6FD0004D0E0 /* Differentiator */; };
 		A0AFC3312B93E6FD0004D0E0 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = A0AFC3302B93E6FD0004D0E0 /* RxDataSources */; };
 		A0AFC3342B93E7CC0004D0E0 /* EasyPeasy in Frameworks */ = {isa = PBXBuildFile; productRef = A0AFC3332B93E7CC0004D0E0 /* EasyPeasy */; };
-		A0AFC3372B93E85A0004D0E0 /* DiscoverNewProductsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC3362B93E85A0004D0E0 /* DiscoverNewProductsViewController.swift */; };
 		A0AFC33A2B93E8820004D0E0 /* ProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC3392B93E8820004D0E0 /* ProductService.swift */; };
 		A0AFC33D2B93E8A40004D0E0 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC33C2B93E8A40004D0E0 /* Product.swift */; };
 		A0AFC33F2B93E8C60004D0E0 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC33E2B93E8C60004D0E0 /* Endpoint.swift */; };
@@ -54,6 +54,7 @@
 		A03AB91A2B959A870044E3D4 /* ProductCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCardView.swift; sourceTree = "<group>"; };
 		A03AB91C2B95AF8E0044E3D4 /* AppFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFonts.swift; sourceTree = "<group>"; };
 		A03AB91E2B95BF820044E3D4 /* ProductViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductViewController.swift; sourceTree = "<group>"; };
+		A096472F2B967B2C004D8A60 /* DiscoverProductsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverProductsViewController.swift; sourceTree = "<group>"; };
 		A0AFC2F12B93E4E70004D0E0 /* Amazona.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Amazona.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0AFC2F42B93E4E70004D0E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A0AFC2F62B93E4E70004D0E0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -65,7 +66,6 @@
 		A0AFC3112B93E4E80004D0E0 /* AmazonaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AmazonaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0AFC3152B93E4E80004D0E0 /* AmazonaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmazonaUITests.swift; sourceTree = "<group>"; };
 		A0AFC3172B93E4E80004D0E0 /* AmazonaUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmazonaUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		A0AFC3362B93E85A0004D0E0 /* DiscoverNewProductsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverNewProductsViewController.swift; sourceTree = "<group>"; };
 		A0AFC3392B93E8820004D0E0 /* ProductService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductService.swift; sourceTree = "<group>"; };
 		A0AFC33C2B93E8A40004D0E0 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		A0AFC33E2B93E8C60004D0E0 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
@@ -163,8 +163,8 @@
 		A0AFC3352B93E8340004D0E0 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				A0AFC3362B93E85A0004D0E0 /* DiscoverNewProductsViewController.swift */,
 				A03AB91E2B95BF820044E3D4 /* ProductViewController.swift */,
+				A096472F2B967B2C004D8A60 /* DiscoverProductsViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -370,7 +370,7 @@
 				A0AFC33F2B93E8C60004D0E0 /* Endpoint.swift in Sources */,
 				A0AFC2F52B93E4E70004D0E0 /* AppDelegate.swift in Sources */,
 				A03AB91D2B95AF8E0044E3D4 /* AppFonts.swift in Sources */,
-				A0AFC3372B93E85A0004D0E0 /* DiscoverNewProductsViewController.swift in Sources */,
+				A09647302B967B2C004D8A60 /* DiscoverProductsViewController.swift in Sources */,
 				A0AFC3412B93E8DF0004D0E0 /* Errors.swift in Sources */,
 				A0AFC2F72B93E4E70004D0E0 /* SceneDelegate.swift in Sources */,
 				A0AFC33A2B93E8820004D0E0 /* ProductService.swift in Sources */,

@@ -13,6 +13,7 @@ class ProductCardView: UIView {
     init(product: Product) {
         super.init(frame: .zero)
         addViews()
+        configureCardBorder()
         layoutViews()
         configure(with: product)
     }
@@ -29,38 +30,56 @@ class ProductCardView: UIView {
         addSubview(freeTagView)
         addSubview(priceLabel)
         freeTagView.addSubview(freeTagLabel)
+        backgroundColor = .white
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        /// Since bounds are now correctly set, update the path of the shadow layer
+        layer.shadowPath = UIBezierPath(roundedRect: bounds,
+                                        cornerRadius: layer.cornerRadius).cgPath
+    }
+    
+    private func configureCardBorder() {
+        /// set common properties that don't depend on the layout here
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.5
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowRadius = 5
+        layer.cornerRadius = kCornerRadius
+        layer.masksToBounds = false // Important for shadows
     }
     
     private func layoutViews() {
         imageView.easy.layout(
-            Top(),
-            Leading(),
-            Trailing(),
-            Height(*0.5).like(self)
+            Top(kMediumPadding),
+            Leading(kMediumPadding),
+            Trailing(kMediumPadding),
+            Height(*0.6).like(self)
         )
         
         titleLabel.easy.layout(
-            Top(16).to(imageView, .bottom),
-            Leading(10),
-            Trailing(10)
+            Top(kMediumPadding).to(imageView, .bottom),
+            Leading(kMediumPadding),
+            Trailing(kMediumPadding)
         )
         
         subtitleLabel.easy.layout(
-            Top(8).to(titleLabel, .bottom),
-            Leading(10),
-            Trailing(10)
+            Top(kSmallPadding).to(titleLabel, .bottom),
+            Leading(kMediumPadding),
+            Trailing(kMediumPadding)
         )
         
         ratingLabel.easy.layout(
-            Top(8).to(subtitleLabel, .bottom),
-            Leading(10)
+            Top(kSmallPadding).to(subtitleLabel, .bottom),
+            Leading(kMediumPadding)
         )
         
         freeTagView.easy.layout(
-            Leading(10),
-            Bottom(10),
+            Leading(kMediumPadding),
+            Bottom(kMediumPadding),
             Width(50),
-            Height(20)
+            Height(kMediumPadding)
         )
         
         freeTagLabel.easy.layout(
@@ -68,8 +87,8 @@ class ProductCardView: UIView {
         )
         
         priceLabel.easy.layout(
-            Bottom(10),
-            Trailing(10)
+            Bottom(kMediumPadding),
+            Trailing(kMediumPadding)
         )
     }
     
@@ -96,7 +115,7 @@ class ProductCardView: UIView {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 8
+        imageView.layer.cornerRadius = kCornerRadius
         imageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         return imageView
     }()
@@ -121,7 +140,7 @@ class ProductCardView: UIView {
     
     private let priceLabel: UILabel = {
         let priceLabel = UILabel()
-        priceLabel.font = AppFonts.helveticaNeue(ofSize: 16, weight: .bold)
+        priceLabel.font = AppFonts.helveticaNeue(ofSize: kMediumPadding, weight: .bold)
         priceLabel.textColor = .red
         return priceLabel
     }()
@@ -145,7 +164,7 @@ class ProductCardView: UIView {
     private let freeTagView: UIView = {
         let freeTagView = UIView()
         freeTagView.backgroundColor = .green
-        freeTagView.layer.cornerRadius = 8
+        freeTagView.layer.cornerRadius = kCornerRadius
         return freeTagView
     }()
 }

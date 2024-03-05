@@ -16,16 +16,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch" translatesAutoresizingMaskIntoConstraints="NO" id="Wcb-ec-3ww">
-                                <rect key="frame" x="0.0" y="126" width="393" height="600"/>
+                                <rect key="frame" x="71.666666666666686" y="301" width="250" height="250"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="250" id="egW-3w-BAe"/>
+                                    <constraint firstAttribute="width" constant="250" id="ojL-FF-EGu"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="0.13725490870000001" green="0.31372550129999999" blue="0.60784316059999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Wcb-ec-3ww" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="2Fx-tv-P8h"/>
-                            <constraint firstAttribute="trailing" secondItem="Wcb-ec-3ww" secondAttribute="trailing" id="3RS-ra-6ei"/>
                             <constraint firstItem="Wcb-ec-3ww" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="8vZ-83-UVH"/>
-                            <constraint firstItem="Wcb-ec-3ww" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="cPD-FU-nqv"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -35,6 +37,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="launch" width="600" height="600"/>
+        <image name="launch" width="500" height="500"/>
     </resources>
 </document>
