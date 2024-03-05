@@ -24,9 +24,9 @@ class ProductCardView: UIView {
     }
     
     private func addViews() {
-        addSubview(imageView)
+        addSubview(productImageView)
         addSubview(titleLabel)
-        addSubview(subtitleLabel)
+        addSubview(descriptionLabel)
         addSubview(ratingStackView)
         
         bottomStackView.addArrangedSubview(categoryContainerView)
@@ -57,7 +57,7 @@ class ProductCardView: UIView {
     }
     
     private func layoutViews() {
-        imageView.easy.layout(
+        productImageView.easy.layout(
             Top(kMediumPadding),
             Leading(kMediumPadding),
             Trailing(kMediumPadding),
@@ -65,19 +65,19 @@ class ProductCardView: UIView {
         )
         
         titleLabel.easy.layout(
-            Top(kMediumPadding).to(imageView, .bottom),
+            Top(kMediumPadding).to(productImageView, .bottom),
             Leading(kMediumPadding),
             Trailing(kMediumPadding)
         )
         
-        subtitleLabel.easy.layout(
+        descriptionLabel.easy.layout(
             Top(kSmallPadding).to(titleLabel, .bottom),
             Leading(kMediumPadding),
             Trailing(kMediumPadding)
         )
         
         ratingStackView.easy.layout(
-            Top(kSmallPadding).to(subtitleLabel, .bottom),
+            Top(kSmallPadding).to(descriptionLabel, .bottom),
             Leading(kMediumPadding)
         )
         
@@ -104,7 +104,7 @@ class ProductCardView: UIView {
     private func configure(with product: Product) {
         titleLabel.text = product.title
         priceLabel.text = "\(product.price.formatted(.currency(code: "EUR")))"
-        subtitleLabel.text = product.descriptionText
+        descriptionLabel.text = product.descriptionText
         ratingLabel.text = "\(product.rating?.rate ?? 0)"
         ratingCountLabel.text = "(\(product.rating?.count ?? 0) ratings)"
         categoryLabel.text = product.category
@@ -113,7 +113,7 @@ class ProductCardView: UIView {
             URLSession.shared.dataTask(with: imageURL) { (data, _, error) in
                 if let data = data {
                     DispatchQueue.main.async {
-                        self.imageView.image = UIImage(data: data)
+                        self.productImageView.image = UIImage(data: data)
                     }
                 }
             }.resume()
@@ -122,13 +122,13 @@ class ProductCardView: UIView {
     
     // MARK: - Views
     
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = kCornerRadius
-        imageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        return imageView
+    private let productImageView: UIImageView = {
+        let productImageView = UIImageView()
+        productImageView.contentMode = .scaleAspectFit
+        productImageView.clipsToBounds = true
+        productImageView.layer.cornerRadius = kCornerRadius
+        productImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        return productImageView
     }()
     
     private let titleLabel: UILabel = {
@@ -140,13 +140,13 @@ class ProductCardView: UIView {
         return titleLabel
     }()
     
-    private let subtitleLabel: UILabel = {
-        let subtitleLabel = UILabel()
-        subtitleLabel.font = AppFonts.helveticaNeue(ofSize: 14)
-        subtitleLabel.textColor = .darkGray
-        subtitleLabel.numberOfLines = 2
-        subtitleLabel.lineBreakMode = .byWordWrapping
-        return subtitleLabel
+    private let descriptionLabel: UILabel = {
+        let descriptionLabel = UILabel()
+        descriptionLabel.font = AppFonts.helveticaNeue(ofSize: 14)
+        descriptionLabel.textColor = .darkGray
+        descriptionLabel.numberOfLines = 2
+        descriptionLabel.lineBreakMode = .byWordWrapping
+        return descriptionLabel
     }()
     
     private let priceLabel: UILabel = {

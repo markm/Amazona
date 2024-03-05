@@ -36,6 +36,7 @@ class DiscoverProductsViewController: UIViewController {
         configureScrollView()
         setupActivityIndicator()
         fetchProducts()
+        title = "Discover New Products"
     }
     
     override func viewWillAppear(_ animated: Bool) {

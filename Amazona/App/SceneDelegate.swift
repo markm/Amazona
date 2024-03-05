@@ -23,6 +23,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
         window?.backgroundColor = .white
         window?.windowScene = windowScene
+        
+        UINavigationBar.appearance().tintColor = UIColor.AmazonaMagenta
+        let backButtonAttributes: [NSAttributedString.Key: Any] = [
+            .font: AppFonts.helveticaNeue(ofSize: 17)
+         ]
+         
+         UIBarButtonItem.appearance().setTitleTextAttributes(backButtonAttributes, for: .normal)
+         UIBarButtonItem.appearance().setTitleTextAttributes(backButtonAttributes, for: .highlighted)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

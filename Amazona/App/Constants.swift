@@ -11,5 +11,6 @@ let kDefaultRecoverySuggestion = "Try again, or contact help@amazona.com"
 
 let kSmallPadding = CGFloat(8)
 let kMediumPadding = CGFloat(16)
+let kLargePadding = CGFloat(24)
 let kCornerRadius = CGFloat(16)
 let kSearchTextFieldHeight = CGFloat(44)
