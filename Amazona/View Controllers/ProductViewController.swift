@@ -102,7 +102,8 @@ class ProductViewController: UIViewController {
         
         bottomStackView.easy.layout(
             Leading(kSmallPadding),
-            Trailing(kSmallPadding)
+            Trailing(kSmallPadding),
+            Top(kMediumPadding).to(ratingStackView, .bottom)
         )
         
         categoryContainerView.easy.layout(
@@ -122,8 +123,7 @@ class ProductViewController: UIViewController {
             Top(kMediumPadding).to(bottomStackView, .bottom),
             Leading(kSmallPadding),
             Trailing(kSmallPadding),
-            Height(50),
-            Bottom(kSmallPadding).to(view.safeAreaLayoutGuide, .bottom)
+            Height(50)
         )
     }
     
