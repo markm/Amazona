@@ -50,7 +50,7 @@ class CategoryCell: UICollectionViewCell {
         
         /// Subscribe to the isSelected state of the category
         category.isSelected.asObservable()
-            .observe(on: MainScheduler.instance) // Ensure UI updates are on the main thread
+            .observe(on: MainScheduler.instance) /// Ensure UI updates are on the main thread
             .subscribe(onNext: { [weak self] isSelected in
                 /// Update the button appearance based on the new isSelected state
                 self?.updateButtonAppearance(isSelected: isSelected)
@@ -61,14 +61,14 @@ class CategoryCell: UICollectionViewCell {
     private func updateButtonAppearance(isSelected: Bool) {
         if isSelected {
             button.layer.borderWidth = 1.0
-            button.layer.borderColor = UIColor.AmazonaMagenta.cgColor // Magenta border for selected state
+            button.layer.borderColor = UIColor.AmazonaMagenta.cgColor
             button.backgroundColor = .white
             button.setTitleColor(.AmazonaMagenta, for: .normal)
         } else {
             button.layer.borderWidth = 1.0
-            button.layer.borderColor = UIColor.AmazonaGrey.cgColor // Grey border for unselected state
+            button.layer.borderColor = UIColor.AmazonaGrey.cgColor
             button.backgroundColor = .white
-            button.setTitleColor(.black, for: .normal)
+            button.setTitleColor(.AmazonaGrey, for: .normal)
         }
     }
     

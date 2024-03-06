@@ -105,7 +105,7 @@ class FilterProductsViewController: UIViewController {
     
     private func setupDoneButton() {
         doneButton.setTitle("Done", for: .normal)
-        doneButton.setTitleColor(.AmazonaVibrantGreen, for: .normal)
+        doneButton.setTitleColor(.AmazonaDarkBlue, for: .normal)
         doneButton.titleLabel?.font = AppFonts.helveticaNeue(ofSize: 16)
         doneButton.contentHorizontalAlignment = .right
         doneButton.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
