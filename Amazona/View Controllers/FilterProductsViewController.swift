@@ -265,6 +265,8 @@ extension FilterProductsViewController: CategoryCellDelegate {
     }
 }
 
+// MARK: - UITableViewDataSource & UITableViewDataSource
+
 extension FilterProductsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.sortOptions.count
