@@ -7,11 +7,14 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
+import RxDataSources
 import EasyPeasy
 
 class DiscoverProductsViewController: UIViewController {
     
     private var products: [Product] = []
+    private var selectedCategories: [Category] = []
     private var cardWidth: CGFloat = 0 /// Card width will be set based on the scrollView's width
     private let viewModel = DiscoverNewProductsViewModel()
     private let disposeBag = DisposeBag()
@@ -71,6 +74,7 @@ class DiscoverProductsViewController: UIViewController {
         setupViews()
         layoutViews()
         configureScrollView()
+        bindProductsToScrollView()
         fetchProducts()
         title = "Discover New Products"
     }
@@ -86,37 +90,11 @@ class DiscoverProductsViewController: UIViewController {
     private func fetchProducts() {
         /// make sure the UI is starting from scratch
         scrollView.subviews.forEach { $0.removeFromSuperview() }
-        
         activityIndicator.startAnimating()
-        
-        /// create the observable to fetch the products
-        let observable = Observable<[Product]>.create { observer in
-            Task {
-                do {
-                    let products = try await self.viewModel.fetchProducts()
-                    observer.onNext(products)
-                    observer.onCompleted()
-                } catch {
-                    observer.onError(error)
-                }
-            }
-            return Disposables.create()
+        Task {
+            try await viewModel.fetchProducts()
+            self.activityIndicator.stopAnimating()
         }
-
-        /// subscribe to the observable, and react to the products being returned
-        observable
-            .subscribe(onNext: { products in
-                self.products = products
-                self.pageControl.numberOfPages = products.count
-                self.configureScrollView()
-                self.layoutProductCards()
-                self.activityIndicator.stopAnimating()
-            }, onError: { error in
-                print("Error: \(error)")
-                self.showErrorAlert(error)
-                self.activityIndicator.stopAnimating()
-            })
-            .disposed(by: disposeBag)
     }
     
     // MARK: - Setup Methods for UI Elements
@@ -148,7 +126,7 @@ class DiscoverProductsViewController: UIViewController {
         filterButton.tintColor = .AmazonaGrey
         let filterButtonImage = UIImage(systemName: "line.3.horizontal.decrease.circle.fill")
         filterButton.setBackgroundImage(filterButtonImage?.withRenderingMode(.alwaysTemplate), for: .normal)
-        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        filterButton.addTarget(self, action: #selector(presentFilterProductsViewController), for: .touchUpInside)
         filterButton.imageView?.contentMode = .scaleAspectFit
     }
     
@@ -258,12 +236,8 @@ class DiscoverProductsViewController: UIViewController {
     
     // MARK: - Actions
     
-    @objc private func filterButtonTapped() {
-        /// get a uniqued list of categories from the products and sort them alphabetically
-        let uniqueCategoryStrings = Array(Set(products.map { $0.category }))
-        let categories = uniqueCategoryStrings.map { Category(name: $0) }.sorted(by: <)
-        
-        let categoriesViewModel = FilterProductsViewModel(categories: categories)
+    @objc private func presentFilterProductsViewController() {
+        let categoriesViewModel = FilterProductsViewModel(categories: viewModel.categories)
         let filterProductsViewController = FilterProductsViewController(viewModel: categoriesViewModel)
         if #available(iOS 13.0, *) {
             filterProductsViewController.modalPresentationStyle = .pageSheet
@@ -281,6 +255,17 @@ class DiscoverProductsViewController: UIViewController {
                 /// Filter products based on the selectedCategory and update the UI
                 
                 print("Selected category: \(selectedCategory)")
+                
+                guard let self else { return }
+                
+                if selectedCategory.isSelected.value == true {
+                    
+                } else {
+                    
+                }
+                
+                self.products = self.products.filter { $0.category == selectedCategory.name  }
+                viewModel.updateProducts(with: self.products)
             })
             .disposed(by: disposeBag)
         
@@ -335,6 +320,18 @@ class DiscoverProductsViewController: UIViewController {
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertController.addAction(okAction)
         self.present(alertController, animated: true, completion: nil)
+    }
+    
+    private func bindProductsToScrollView() {
+        viewModel.products
+            .observe(on: MainScheduler.instance) // Ensure UI updates are performed on the main thread.
+            .subscribe(onNext: { [weak self] products in
+                self?.products = products
+                self?.configureScrollView()
+                self?.layoutProductCards()
+                self?.pageControl.numberOfPages = products.count
+            })
+            .disposed(by: disposeBag)
     }
 }
 
