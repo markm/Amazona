@@ -13,14 +13,14 @@ import EasyPeasy
 
 class FilterProductsViewController: UIViewController {
     
-    var viewModel: CategoriesViewModel
+    var viewModel: FilterProductsViewModel
     
-    var priceRangeSubject = BehaviorSubject<ClosedRange<Double>?>(value: nil)
-    var selectedCategorySubject = BehaviorSubject<String?>(value: nil)
-    var selectedRatingSubject = BehaviorSubject<Int?>(value: nil)
+    var selectedCategorySubject = BehaviorSubject<Category?>(value: nil)
     
     private let doneButton = UIButton()
     private let resetButton = UIButton()
+    private let sortOptionsTableView = UITableView()
+    private let selectedCategory: Category? = nil
     private var selectedPriceRange: ClosedRange<Double> = 0.0...100.0
     private var categoriesCollectionView = UICollectionView(frame: .zero,
                                                             collectionViewLayout: UICollectionViewFlowLayout())
@@ -49,7 +49,7 @@ class FilterProductsViewController: UIViewController {
         categoriesLabel.text = "CATEGORIES"
         categoriesLabel.textColor = .AmazonaGrey
         categoriesLabel.font = AppFonts.helveticaNeue(ofSize: 16)
-        categoriesLabel.textAlignment = .center
+        categoriesLabel.textAlignment = .left
         return categoriesLabel
     }()
     
@@ -61,9 +61,18 @@ class FilterProductsViewController: UIViewController {
         return horizontalSeperatorView
     }()
     
+    private let sortByLabel: UILabel = {
+        let sortByLabel = UILabel()
+        sortByLabel.text = "SORT BY"
+        sortByLabel.textColor = .AmazonaGrey
+        sortByLabel.font = AppFonts.helveticaNeue(ofSize: 16)
+        sortByLabel.textAlignment = .left
+        return sortByLabel
+    }()
+    
     // MARK: - Initializers
     
-    init(viewModel: CategoriesViewModel) {
+    init(viewModel: FilterProductsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -80,6 +89,7 @@ class FilterProductsViewController: UIViewController {
         view.backgroundColor = .white
         setupButtons()
         setupCollectionView()
+        setupSortOptionsTableView()
         layoutViews()
     }
     
@@ -114,6 +124,15 @@ class FilterProductsViewController: UIViewController {
         categoriesCollectionView.dataSource = self
     }
     
+    private func setupSortOptionsTableView() {
+        sortOptionsTableView.delegate = self
+        sortOptionsTableView.dataSource = self
+        sortOptionsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
+        sortOptionsTableView.tableFooterView = UIView()  /// Remove unused separators
+        sortOptionsTableView.register(UITableViewCell.self, forCellReuseIdentifier: kSortOptionCellIdentifier)
+
+    }
+
     // MARK: - Layout Methods for UI Elements
     
     private func layoutViews() {
@@ -127,6 +146,8 @@ class FilterProductsViewController: UIViewController {
         topStackView.addArrangedSubview(doneButton)
         view.addSubview(categoriesLabel)
         view.addSubview(categoriesCollectionView)
+        view.addSubview(sortByLabel)
+        view.addSubview(sortOptionsTableView)
         
         /**
          Set layouts with Easy Peasy
@@ -159,7 +180,17 @@ class FilterProductsViewController: UIViewController {
             Top(kSmallPadding).to(categoriesLabel, .bottom),
             Leading(kMediumPadding),
             Trailing(kMediumPadding),
-            Bottom(kMediumPadding).to(view.safeAreaLayoutGuide, .bottom)
+            Height(>=100)
+        )
+        sortByLabel.easy.layout(
+            Top(kMediumPadding).to(categoriesCollectionView, .bottom),
+            Leading(kMediumPadding)
+        )
+        sortOptionsTableView.easy.layout(
+            Top(kSmallPadding).to(sortByLabel, .bottom),
+            Leading(),
+            Trailing(),
+            Height(3 * 44)  /// Assuming a row height of 44 points, adjust as needed
         )
     }
     
@@ -170,8 +201,6 @@ class FilterProductsViewController: UIViewController {
     }
     
     @objc func doneButtonTapped() {
-        print("Done button tapped")
-        priceRangeSubject.onNext(selectedPriceRange)
         dismiss(animated: true)
     }
 }
@@ -180,12 +209,11 @@ class FilterProductsViewController: UIViewController {
 
 extension FilterProductsViewController: UICollectionViewDataSource {
     
-    // In your cell for item at index path dataSource method:
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: kCategoryCellIdentifier, for: indexPath) as! CategoryCell
         let category = viewModel.categories[indexPath.item]
         cell.configure(with: category)
-        cell.delegate = self // Set the view controller as the delegate
+        cell.delegate = self
         return cell
     }
     
@@ -202,6 +230,7 @@ extension FilterProductsViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let category = viewModel.categories[indexPath.item]
+        /// get the width of the string, essentially, and add some padding
         let width = category.name.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)]).width + 20
         return CGSize(width: width, height: 40)
     }
@@ -226,6 +255,8 @@ extension FilterProductsViewController: CategoryCellDelegate {
         /// Toggle the selection state and update UI
         let isSelected = !category.isSelected.value
         category.isSelected.accept(isSelected)
+        
+        selectedCategorySubject.onNext(category)
 
         /// Explicitly reconfigure the cell to reflect the updated state
         if let updatedCell = categoriesCollectionView.cellForItem(at: indexPath) as? CategoryCell {
@@ -233,6 +264,31 @@ extension FilterProductsViewController: CategoryCellDelegate {
         }
     }
 }
+
+extension FilterProductsViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        viewModel.sortOptions.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: kSortOptionCellIdentifier, for: indexPath)
+        cell.textLabel?.text = viewModel.sortOptions[indexPath.row].rawValue
+        let isSelected = viewModel.isSortOptionSelected(atIndex: indexPath.row)
+        cell.accessoryType = isSelected ? .checkmark : .none
+        cell.tintColor = isSelected ? .AmazonaMagenta : .AmazonaGrey
+        cell.textLabel?.textColor = isSelected ? .AmazonaMagenta : .AmazonaGrey
+        return cell
+    }
+}
+
+extension FilterProductsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        viewModel.selectSortOption(atIndex: indexPath.row)
+        tableView.reloadData()
+    }
+}
+
 
 
 

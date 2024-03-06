@@ -15,3 +15,4 @@ let kLargePadding = CGFloat(24)
 let kCornerRadius = CGFloat(16)
 let kSearchTextFieldHeight = CGFloat(44)
 let kCategoryCellIdentifier = "CategoryCell"
+let kSortOptionCellIdentifier = "SortOptionCell"

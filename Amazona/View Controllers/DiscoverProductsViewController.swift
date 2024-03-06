@@ -259,9 +259,11 @@ class DiscoverProductsViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func filterButtonTapped() {
+        /// get a uniqued list of categories from the products and sort them alphabetically
         let uniqueCategoryStrings = Array(Set(products.map { $0.category }))
-        let categories = uniqueCategoryStrings.map { Category(name: $0) }
-        let categoriesViewModel = CategoriesViewModel(categories: categories)
+        let categories = uniqueCategoryStrings.map { Category(name: $0) }.sorted(by: <)
+        
+        let categoriesViewModel = FilterProductsViewModel(categories: categories)
         let filterProductsViewController = FilterProductsViewController(viewModel: categoriesViewModel)
         if #available(iOS 13.0, *) {
             filterProductsViewController.modalPresentationStyle = .pageSheet
@@ -271,15 +273,18 @@ class DiscoverProductsViewController: UIViewController {
         }
         present(filterProductsViewController, animated: true, completion: nil)
         
-        filterProductsViewController.priceRangeSubject
-            .subscribe(onNext: { [weak self] priceRange in
-                guard let priceRange = priceRange else { return }
+        /// Subscribe to the selectedCategorySubject in the filterProductsViewController
+        filterProductsViewController.selectedCategorySubject
+            .subscribe(onNext: { [weak self] selectedCategory in
+                guard let selectedCategory = selectedCategory else { return }
                 
-                /// Filter products based on the price range and update the UI
+                /// Filter products based on the selectedCategory and update the UI
                 
-                print("Selected price range: \(priceRange)")
+                print("Selected category: \(selectedCategory)")
             })
             .disposed(by: disposeBag)
+        
+        /// TODO: Subscribe to the sort by being selected in the filter view contoller
     }
     
     @objc private func productCardTapped(_ recognizer: UITapGestureRecognizer) {
