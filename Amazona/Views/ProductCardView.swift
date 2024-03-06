@@ -10,117 +10,7 @@ import EasyPeasy
 
 class ProductCardView: UIView {
     
-    init(product: Product) {
-        super.init(frame: .zero)
-        addViews()
-        configureCardBorder()
-        layoutViews()
-        configure(with: product)
-        backgroundColor = .white
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func addViews() {
-        addSubview(productImageView)
-        addSubview(titleLabel)
-        addSubview(descriptionLabel)
-        addSubview(ratingStackView)
-        
-        bottomStackView.addArrangedSubview(categoryContainerView)
-        bottomStackView.addArrangedSubview(priceLabel)
-        ratingStackView.addArrangedSubview(ratingStarImageView)
-        ratingStackView.addArrangedSubview(ratingLabel)
-        ratingStackView.addArrangedSubview(ratingCountLabel)
-        
-        addSubview(bottomStackView)
-        categoryContainerView.addSubview(categoryLabel)
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        /// Since bounds are now correctly set, update the path of the shadow layer
-        layer.shadowPath = UIBezierPath(roundedRect: bounds,
-                                        cornerRadius: layer.cornerRadius).cgPath
-    }
-    
-    private func configureCardBorder() {
-        /// set common properties that don't depend on the layout here
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.5
-        layer.shadowOffset = CGSize(width: 0, height: 2)
-        layer.shadowRadius = 5
-        layer.cornerRadius = kCornerRadius
-        layer.masksToBounds = false /// Important for shadows
-    }
-    
-    private func layoutViews() {
-        productImageView.easy.layout(
-            Top(kMediumPadding),
-            Leading(kMediumPadding),
-            Trailing(kMediumPadding),
-            Height(*0.55).like(self)
-        )
-        
-        titleLabel.easy.layout(
-            Top(kMediumPadding).to(productImageView, .bottom),
-            Leading(kMediumPadding),
-            Trailing(kMediumPadding)
-        )
-        
-        descriptionLabel.easy.layout(
-            Top(kSmallPadding).to(titleLabel, .bottom),
-            Leading(kMediumPadding),
-            Trailing(kMediumPadding)
-        )
-        
-        ratingStackView.easy.layout(
-            Top(kSmallPadding).to(descriptionLabel, .bottom),
-            Leading(kMediumPadding)
-        )
-        
-        bottomStackView.easy.layout(
-            Bottom(kSmallPadding).to(safeAreaLayoutGuide, .bottom),
-            Leading(kSmallPadding),
-            Trailing(kSmallPadding)
-        )
-        
-        categoryContainerView.easy.layout(
-            Height().like(bottomStackView),
-            Width(*0.5).like(bottomStackView)
-        )
-        
-        categoryLabel.easy.layout(
-            Center()
-        )
-        
-        priceLabel.easy.layout(
-            Height().like(bottomStackView)
-        )
-    }
-    
-    private func configure(with product: Product) {
-        titleLabel.text = product.title
-        priceLabel.text = "\(product.price.formatted(.currency(code: "EUR")))"
-        descriptionLabel.text = product.descriptionText
-        ratingLabel.text = "\(product.rating?.rate ?? 0)"
-        ratingCountLabel.text = "(\(product.rating?.count ?? 0) ratings)"
-        categoryLabel.text = product.category
-        /// Load image from URL
-        if let imageURL = URL(string: product.imageURLString) {
-            URLSession.shared.dataTask(with: imageURL) { (data, _, error) in
-                if let data = data {
-                    DispatchQueue.main.async {
-                        self.productImageView.image = UIImage(data: data)
-                    }
-                }
-            }.resume()
-        }
-    }
-    
-    // MARK: - Views
+    // MARK: - Properties
     
     private let productImageView: UIImageView = {
         let productImageView = UIImageView()
@@ -215,5 +105,124 @@ class ProductCardView: UIView {
         stackView.alignment = .center
         return stackView
     }()
+    
+    // MARK: - Initializers
+    
+    init(product: Product) {
+        super.init(frame: .zero)
+        setupViews()
+        configureCardBorder()
+        layoutViews()
+        configure(with: product)
+        backgroundColor = .white
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Setup Methods for UI Elements
+    
+    private func setupViews() {
+        addSubview(productImageView)
+        addSubview(titleLabel)
+        addSubview(descriptionLabel)
+        addSubview(ratingStackView)
+        
+        bottomStackView.addArrangedSubview(categoryContainerView)
+        bottomStackView.addArrangedSubview(priceLabel)
+        ratingStackView.addArrangedSubview(ratingStarImageView)
+        ratingStackView.addArrangedSubview(ratingLabel)
+        ratingStackView.addArrangedSubview(ratingCountLabel)
+        
+        addSubview(bottomStackView)
+        categoryContainerView.addSubview(categoryLabel)
+    }
+    
+    // MARK: - Layout Methods for UI Elements
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        /// Since bounds are now correctly set, update the path of the shadow layer
+        layer.shadowPath = UIBezierPath(roundedRect: bounds,
+                                        cornerRadius: layer.cornerRadius).cgPath
+    }
+    
+    private func layoutViews() {
+        productImageView.easy.layout(
+            Top(kMediumPadding),
+            Leading(kMediumPadding),
+            Trailing(kMediumPadding),
+            Height(*0.55).like(self)
+        )
+        
+        titleLabel.easy.layout(
+            Top(kMediumPadding).to(productImageView, .bottom),
+            Leading(kMediumPadding),
+            Trailing(kMediumPadding)
+        )
+        
+        descriptionLabel.easy.layout(
+            Top(kSmallPadding).to(titleLabel, .bottom),
+            Leading(kMediumPadding),
+            Trailing(kMediumPadding)
+        )
+        
+        ratingStackView.easy.layout(
+            Top(kSmallPadding).to(descriptionLabel, .bottom),
+            Leading(kMediumPadding)
+        )
+        
+        bottomStackView.easy.layout(
+            Bottom(kSmallPadding).to(safeAreaLayoutGuide, .bottom),
+            Leading(kSmallPadding),
+            Trailing(kSmallPadding)
+        )
+        
+        categoryContainerView.easy.layout(
+            Height().like(bottomStackView),
+            Width(*0.5).like(bottomStackView)
+        )
+        
+        categoryLabel.easy.layout(
+            Center()
+        )
+        
+        priceLabel.easy.layout(
+            Height().like(bottomStackView)
+        )
+    }
+    
+    // MARK: - Configuration Methods
+    
+    private func configureCardBorder() {
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.5
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowRadius = 5
+        layer.cornerRadius = kCornerRadius
+        layer.masksToBounds = false /// Important for shadows
+    }
+    
+    @MainActor
+    private func configure(with product: Product) {
+        titleLabel.text = product.title
+        priceLabel.text = "\(product.price.formatted(.currency(code: "EUR")))"
+        descriptionLabel.text = product.descriptionText
+        ratingLabel.text = "\(product.rating?.rate ?? 0)"
+        ratingCountLabel.text = "(\(product.rating?.count ?? 0) ratings)"
+        categoryLabel.text = product.category
+        
+        /// Load image from URL
+        if let imageURL = URL(string: product.imageURLString) {
+            URLSession.shared.dataTask(with: imageURL) { (data, _, error) in
+                if let data = data {
+                    DispatchQueue.main.async {
+                        self.productImageView.image = UIImage(data: data)
+                    }
+                }
+            }.resume()
+        }
+    }
 }
 
