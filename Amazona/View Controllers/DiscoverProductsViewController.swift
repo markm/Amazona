@@ -259,7 +259,10 @@ class DiscoverProductsViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func filterButtonTapped() {
-        let filterProductsViewController = FilterProductsViewController()
+        let uniqueCategoryStrings = Array(Set(products.map { $0.category }))
+        let categories = uniqueCategoryStrings.map { Category(name: $0) }
+        let categoriesViewModel = CategoriesViewModel(categories: categories)
+        let filterProductsViewController = FilterProductsViewController(viewModel: categoriesViewModel)
         if #available(iOS 13.0, *) {
             filterProductsViewController.modalPresentationStyle = .pageSheet
             filterProductsViewController.isModalInPresentation = false /// allows swipe down to dismiss
