@@ -7,25 +7,62 @@
 
 import UIKit
 import RxSwift
- import EasyPeasy
+import EasyPeasy
 
 class DiscoverProductsViewController: UIViewController {
     
     private var products: [Product] = []
     private var cardWidth: CGFloat = 0 /// Card width will be set based on the scrollView's width
-    
     private let viewModel = DiscoverNewProductsViewModel()
     private let disposeBag = DisposeBag()
 
     /// UI Components
     private let scrollView = UIScrollView()
-    private let pageControl = UIPageControl()
-    private let titleLabel = UILabel()
-    private let searchStackView = UIStackView()
     private let searchTextField = UITextField()
     private let filterButton = UIButton()
-    private let magnifyingGlassImageView = UIImageView()
-    private let activityIndicator = UIActivityIndicatorView(style: .large)
+    
+    private let searchStackView: UIStackView = {
+        let searchStackView = UIStackView()
+        searchStackView.axis = .horizontal
+        searchStackView.spacing = kSmallPadding
+        searchStackView.distribution = .fill
+        searchStackView.alignment = .center
+        return searchStackView
+    }()
+    
+    private let pageControl: UIPageControl = {
+        let pageControl = UIPageControl()
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
+        pageControl.currentPage = 0
+        pageControl.pageIndicatorTintColor = .AmazonaDarkBlue
+        pageControl.currentPageIndicatorTintColor = .AmazonaMagenta
+        return pageControl
+    }()
+    
+    private let titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.text = "Discover New Products"
+        titleLabel.textColor = .black
+        titleLabel.font = AppFonts.helveticaNeue(ofSize: 26, weight: .bold)
+        titleLabel.numberOfLines = 0
+        titleLabel.lineBreakMode = .byWordWrapping
+        return titleLabel
+    }()
+    
+    private let magnifyingGlassImageView: UIImageView = {
+       let magnifyingGlassImageView = UIImageView()
+        magnifyingGlassImageView.image = UIImage(systemName: "magnifyingglass")
+        magnifyingGlassImageView.contentMode = .center
+        magnifyingGlassImageView.tintColor = .AmazonaGrey
+        return magnifyingGlassImageView
+    }()
+    
+    private let activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.color = .AmazonaMagenta
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
+    }()
 
     // MARK: - Lifecycle
     
@@ -34,7 +71,6 @@ class DiscoverProductsViewController: UIViewController {
         setupViews()
         layoutViews()
         configureScrollView()
-        setupActivityIndicator()
         fetchProducts()
         title = "Discover New Products"
     }
@@ -44,71 +80,9 @@ class DiscoverProductsViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
-    // MARK: - Setup
+    // MARK: - Networking
 
-    private func setupViews() {
-        setupScrollView()
-        setupFilterButton()
-        setupSearchTextField()
-        setupMagnifyingGlassImageView()
-        setupSearchStackView()
-        setupTitleLabel()
-        setupPageControl()
-        
-        /// Put the search text field and the filter button in a stack view, then add it the view
-        searchTextField.leftView = magnifyingGlassImageView
-        searchStackView.addArrangedSubview(searchTextField)
-        searchStackView.addArrangedSubview(filterButton)
-        
-        view.addSubview(scrollView)
-        view.addSubview(searchStackView)
-        view.addSubview(scrollView)
-        view.addSubview(titleLabel)
-        view.addSubview(pageControl)
-        view.addSubview(activityIndicator)
-        
-        /// Set the initial content offset to zero to start with the first card centered
-        DispatchQueue.main.async {
-            self.scrollView.contentOffset = CGPoint.zero
-        }
-    }
-    
-    private func layoutViews() {
-        searchStackView.easy.layout(
-            Top(kMediumPadding).to(view.safeAreaLayoutGuide, .top),
-            Leading(kMediumPadding),
-            Trailing(kMediumPadding)
-        )
-        searchTextField.easy.layout(
-            Height(kSearchTextFieldHeight)
-        )
-        magnifyingGlassImageView.easy.layout(
-            Width(40),
-            Height(40)
-        )
-        filterButton.easy.layout(
-            Width(kSearchTextFieldHeight),
-            Height(kSearchTextFieldHeight)
-        )
-        titleLabel.easy.layout(
-            Top(kMediumPadding).to(searchStackView, .bottom),
-            Leading(kMediumPadding),
-            Trailing(kMediumPadding),
-            Height(60)
-        )
-        scrollView.easy.layout(
-            Top(kSmallPadding).to(titleLabel, .bottom),
-            Leading(),
-            Trailing()
-        )
-        pageControl.easy.layout(
-            Top(kSmallPadding).to(scrollView, .bottom),
-            CenterX(),
-            Height(40),
-            Bottom(kSmallPadding).to(view.safeAreaLayoutGuide, .bottom)
-        )
-    }
-
+    @MainActor
     private func fetchProducts() {
         /// make sure the UI is starting from scratch
         scrollView.subviews.forEach { $0.removeFromSuperview() }
@@ -144,7 +118,98 @@ class DiscoverProductsViewController: UIViewController {
             })
             .disposed(by: disposeBag)
     }
+    
+    // MARK: - Setup Methods for UI Elements
+    
+    private func setupViews() {
+        setupScrollView()
+        setupFilterButton()
+        setupSearchTextField()
         
+        /// Put the search text field and the filter button in a stack view, then add it the view
+        searchTextField.leftView = magnifyingGlassImageView
+        searchStackView.addArrangedSubview(searchTextField)
+        searchStackView.addArrangedSubview(filterButton)
+        
+        view.addSubview(scrollView)
+        view.addSubview(searchStackView)
+        view.addSubview(scrollView)
+        view.addSubview(titleLabel)
+        view.addSubview(pageControl)
+        view.addSubview(activityIndicator)
+        
+        /// Set the initial content offset to zero to start with the first card centered
+        DispatchQueue.main.async {
+            self.scrollView.contentOffset = CGPoint.zero
+        }
+    }
+    
+    private func setupFilterButton() {
+        filterButton.tintColor = .AmazonaGrey
+        let filterButtonImage = UIImage(systemName: "line.3.horizontal.decrease.circle.fill")
+        filterButton.setBackgroundImage(filterButtonImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        filterButton.imageView?.contentMode = .scaleAspectFit
+    }
+    
+    private func setupSearchTextField() {
+        searchTextField.layer.cornerRadius = kSearchTextFieldHeight / 2
+        searchTextField.layer.borderWidth = 1
+        searchTextField.layer.borderColor = UIColor.AmazonaGrey.cgColor
+        searchTextField.placeholder = "Search"
+        searchTextField.textAlignment = .left
+        searchTextField.leftViewMode = .always
+        searchTextField.delegate = self
+        addDoneButtonToSearchKeyboard()
+    }
+    
+    private func setupScrollView() {
+        scrollView.delegate = self
+        scrollView.isPagingEnabled = true
+        scrollView.showsHorizontalScrollIndicator = false
+    }
+    
+    // MARK: - Layout Methods for UI Elements
+    
+    private func layoutViews() {
+        searchStackView.easy.layout(
+            Top(kMediumPadding).to(view.safeAreaLayoutGuide, .top),
+            Leading(kMediumPadding),
+            Trailing(kMediumPadding)
+        )
+        searchTextField.easy.layout(
+            Height(kSearchTextFieldHeight)
+        )
+        magnifyingGlassImageView.easy.layout(
+            Width(40),
+            Height(40)
+        )
+        filterButton.easy.layout(
+            Width(kSearchTextFieldHeight),
+            Height(kSearchTextFieldHeight)
+        )
+        titleLabel.easy.layout(
+            Top(kMediumPadding).to(searchStackView, .bottom),
+            Leading(kMediumPadding),
+            Trailing(kMediumPadding),
+            Height(60)
+        )
+        scrollView.easy.layout(
+            Top(kSmallPadding).to(titleLabel, .bottom),
+            Leading(),
+            Trailing()
+        )
+        pageControl.easy.layout(
+            Top(kSmallPadding).to(scrollView, .bottom),
+            CenterX(),
+            Height(40),
+            Bottom(kSmallPadding).to(view.safeAreaLayoutGuide, .bottom)
+        )
+        activityIndicator.easy.layout(
+            Center()
+        )
+    }
+    
     private func layoutProductCards() {
         guard !products.isEmpty else { return }
         
@@ -162,7 +227,7 @@ class DiscoverProductsViewController: UIViewController {
             let cardXCenter = xOffset + (pageWidth - cardWidth) / 2
             
             /// Set the frame for the card view
-            productCardView.frame = CGRect(x: cardXCenter, 
+            productCardView.frame = CGRect(x: cardXCenter,
                                            y: kSmallPadding,
                                            width: cardWidth,
                                            height: cardHeight)
@@ -186,73 +251,32 @@ class DiscoverProductsViewController: UIViewController {
     }
     
     private func configureScrollView() {
-        cardWidth = view.frame.width * 0.8 // Example: cards take up 80% of the view's width
+        cardWidth = view.frame.width * 0.8 /// cards take up 80% of the view's width
         let sidePadding = (view.frame.width - cardWidth) / 2
         scrollView.contentInset = UIEdgeInsets(top: 0, left: sidePadding, bottom: 0, right: sidePadding)
     }
     
-    private func setupFilterButton() {
-        filterButton.tintColor = .AmazonaGrey
-        filterButton.setBackgroundImage(
-            UIImage(systemName: "line.3.horizontal.decrease.circle.fill")?.withRenderingMode(.alwaysTemplate), for: .normal
-        )
-        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
-        filterButton.imageView?.contentMode = .scaleAspectFit
-    }
-    
-    private func setupSearchTextField() {
-        searchTextField.layer.cornerRadius = kSearchTextFieldHeight / 2
-        searchTextField.layer.borderWidth = 1
-        searchTextField.layer.borderColor = UIColor.AmazonaGrey.cgColor
-        searchTextField.placeholder = "Search"
-        searchTextField.textAlignment = .left
-        searchTextField.leftViewMode = .always
-        searchTextField.delegate = self
-        addDoneButtonToSearchKeyboard()
-    }
-    
-    private func setupMagnifyingGlassImageView() {
-        magnifyingGlassImageView.image = UIImage(systemName: "magnifyingglass")
-        magnifyingGlassImageView.contentMode = .center
-        magnifyingGlassImageView.tintColor = .AmazonaGrey
-    }
-    
-    private func setupScrollView() {
-        scrollView.delegate = self
-        scrollView.isPagingEnabled = true
-        scrollView.showsHorizontalScrollIndicator = false
-    }
-    
-    private func setupSearchStackView() {
-        searchStackView.axis = .horizontal
-        searchStackView.spacing = 10
-        searchStackView.alignment = .center
-    }
-    
-    private func setupTitleLabel() {
-        titleLabel.text = "Discover New Products"
-        titleLabel.textColor = .black
-        titleLabel.font = AppFonts.helveticaNeue(ofSize: 26, weight: .bold)
-        titleLabel.numberOfLines = 0
-        titleLabel.lineBreakMode = .byWordWrapping
-    }
-    
-    private func setupPageControl() {
-        pageControl.translatesAutoresizingMaskIntoConstraints = false
-        pageControl.currentPage = 0
-        pageControl.pageIndicatorTintColor = .lightGray
-        pageControl.currentPageIndicatorTintColor = .darkGray
-    }
-    
-    private func setupActivityIndicator() {
-        activityIndicator.center = view.center
-        activityIndicator.color = UIColor.AmazonaMagenta
-    }
-    
-    // MARK: - Actions & Helpers
+    // MARK: - Actions
     
     @objc private func filterButtonTapped() {
-        // Handle filter button tap
+        let filterProductsViewController = FilterProductsViewController()
+        if #available(iOS 13.0, *) {
+            filterProductsViewController.modalPresentationStyle = .pageSheet
+            filterProductsViewController.isModalInPresentation = false /// allows swipe down to dismiss
+        } else {
+            filterProductsViewController.modalPresentationStyle = .fullScreen /// Fallback on earlier versions
+        }
+        present(filterProductsViewController, animated: true, completion: nil)
+        
+        filterProductsViewController.priceRangeSubject
+            .subscribe(onNext: { [weak self] priceRange in
+                guard let priceRange = priceRange else { return }
+                
+                /// Filter products based on the price range and update the UI
+                
+                print("Selected price range: \(priceRange)")
+            })
+            .disposed(by: disposeBag)
     }
     
     @objc private func productCardTapped(_ recognizer: UITapGestureRecognizer) {
@@ -263,25 +287,26 @@ class DiscoverProductsViewController: UIViewController {
         navigationController?.pushViewController(productViewController, animated: true)
     }
     
-    @objc func doneButtonAction() {
+    @objc private func doneButtonAction() {
         searchTextField.resignFirstResponder()
     }
     
-    func addDoneButtonToSearchKeyboard() {
-        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect.init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
-        
+    // MARK: - Helpers
+    
+    private func addDoneButtonToSearchKeyboard() {
+        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect.init(x: 0,
+                                                                  y: 0,
+                                                                  width: UIScreen.main.bounds.width,
+                                                                  height: 50))
         /// Customize the toolbar appearance
         doneToolbar.barStyle = .default
         doneToolbar.barTintColor = UIColor.darkGray /// Background color
         doneToolbar.tintColor = UIColor.white /// Tint color of the button
-
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        
         let doneBarButton: UIBarButtonItem = UIBarButtonItem(title: "Done",
                                                              style: .done,
                                                              target: self,
                                                              action: #selector(self.doneButtonAction))
-        
         /// Set custom font and color for the "Done" button
         let attributes: [NSAttributedString.Key: Any] = [
             .font: AppFonts.helveticaNeue(ofSize: 16),
@@ -289,7 +314,6 @@ class DiscoverProductsViewController: UIViewController {
         ]
         doneBarButton.setTitleTextAttributes(attributes, for: .normal)
         doneBarButton.setTitleTextAttributes(attributes, for: .highlighted)
-
         let items = [flexSpace, doneBarButton]
         doneToolbar.items = items
         doneToolbar.sizeToFit()

@@ -31,6 +31,7 @@
 		A0AFC3452B93F2750004D0E0 /* DiscoverNewProductsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC3442B93F2750004D0E0 /* DiscoverNewProductsViewModel.swift */; };
 		A0AFC3472B9403E90004D0E0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC3462B9403E90004D0E0 /* Constants.swift */; };
 		A0AFC34A2B940AA00004D0E0 /* UIColor+CustomColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC3492B940AA00004D0E0 /* UIColor+CustomColors.swift */; };
+		A0BAF6982B97DF2600DF920D /* FilterProductsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0BAF6972B97DF2600DF920D /* FilterProductsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		A0AFC3442B93F2750004D0E0 /* DiscoverNewProductsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverNewProductsViewModel.swift; sourceTree = "<group>"; };
 		A0AFC3462B9403E90004D0E0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A0AFC3492B940AA00004D0E0 /* UIColor+CustomColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+CustomColors.swift"; sourceTree = "<group>"; };
+		A0BAF6972B97DF2600DF920D /* FilterProductsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterProductsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 			children = (
 				A096472F2B967B2C004D8A60 /* DiscoverProductsViewController.swift */,
 				A03AB91E2B95BF820044E3D4 /* ProductViewController.swift */,
+				A0BAF6972B97DF2600DF920D /* FilterProductsViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -378,6 +381,7 @@
 				A0AFC34A2B940AA00004D0E0 /* UIColor+CustomColors.swift in Sources */,
 				A0AFC3452B93F2750004D0E0 /* DiscoverNewProductsViewModel.swift in Sources */,
 				A0AFC33D2B93E8A40004D0E0 /* Product.swift in Sources */,
+				A0BAF6982B97DF2600DF920D /* FilterProductsViewController.swift in Sources */,
 				A0AFC3472B9403E90004D0E0 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
