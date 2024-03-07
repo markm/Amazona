@@ -87,10 +87,6 @@ class ProductsViewModel {
         selectedCategoriesRelay.accept(categories.filter { $0.isSelected.value })
     }
     
-    func setSelectedCategories(_ categories: [Category]) {
-        selectedCategoriesRelay.accept(categories)
-    }
-    
     func sortProducts(_ products: [Product], withSortOption sortOption: ProductSortOption) {
         var sortedProducts: [Product] = []
         switch sortOption {
@@ -102,5 +98,13 @@ class ProductsViewModel {
             sortedProducts = products.sorted { $0.price < $1.price }
         }
         productsRelay.accept(sortedProducts)
+    }
+    
+    func reset() {
+        productsRelay.accept(originalProducts)
+        categories.forEach { $0.isSelected.accept(true) }
+        selectedCategoriesRelay.accept(categories)
+        selectedSortOptionRelay.accept(nil)
+        lastSelectedSortOption = nil
     }
 }

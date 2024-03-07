@@ -193,7 +193,8 @@ class FilterProductsViewController: UIViewController {
     // MARK: - Actions
     
     @objc func resetButtonTapped() {
-        print("Reset button tapped")
+        viewModel.reset()
+        sortOptionsTableView.reloadData()
     }
     
     @objc func doneButtonTapped() {
@@ -266,6 +267,7 @@ extension FilterProductsViewController: CategoryCellDelegate {
 // MARK: - UITableViewDataSource & UITableViewDataSource
 
 extension FilterProductsViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         kSortOptions.count
     }
