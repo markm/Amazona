@@ -17,23 +17,44 @@ class FilterProductsViewModel {
                        ProductSortOption.costHighToLow,
                        ProductSortOption.costLowToHigh]
     
-    private var selectedSortOptions: [ProductSortOption] = []
+    private let selectedCategoriesRelay = BehaviorRelay<[Category]>(value: [])
+    
+    var selectedCategories: Observable<[Category]> {
+        selectedCategoriesRelay.asObservable()
+    }
+    
+    private var selectedSortOption: ProductSortOption?
     
     private let disposeBag = DisposeBag()
 
+    // MARK: - Initializers
+    
     init(categories: [Category]) {
         self.categories = categories
     }
     
+    // MARK: - Public Methods
+    
     func isSortOptionSelected(atIndex index: Int) -> Bool {
-        selectedSortOptions.contains(sortOptions[index])
+        selectedSortOption == sortOptions[index]
     }
     
     func selectSortOption(atIndex index: Int) {
-        selectedSortOptions.removeAll()
-        if isSortOptionSelected(atIndex: index) == false {
-            selectedSortOptions.append(sortOptions[index])
-        }
+        selectedSortOption = sortOptions[index]
+    }
+    
+    func selectCategory(atIndex index: Int) {
+        categories[index].isSelected.accept(true)
+        selectedCategoriesRelay.accept(categories.filter { $0.isSelected.value })
+    }
+    
+    func deselectCategory(atIndex index: Int) {
+        categories[index].isSelected.accept(false)
+        selectedCategoriesRelay.accept(categories.filter { $0.isSelected.value })
+    }
+    
+    func setSelectedCategories(_ categories: [Category]) {
+        selectedCategoriesRelay.accept(categories)
     }
 }
 

@@ -21,6 +21,7 @@ class DiscoverNewProductsViewModel {
         productsRelay.asObservable()
     }
     
+    @MainActor
     func fetchProducts() async throws {
         let products = try await productService.fetchProducts()
         originalProducts = products

@@ -15,15 +15,11 @@ class ProductService {
         guard let url = Endpoint.products.url else {
             throw NetworkingError.invalidURL
         }
-        
         var products = [Product]()
-        
         let response = await AF.request(url).serializingDecodable([Product].self).response
-        
         guard let statusCode = response.response?.statusCode else {
             throw NetworkingError.invalidResponse   /// no status code, invalid response
         }
-        
         switch statusCode {
             case 200...299: /// Successful response, proceed with decoding the response body
                 if let value = response.value {
@@ -38,7 +34,6 @@ class ProductService {
             default:
             throw NetworkError.unknown
         }
-        
         return products
     }
 }

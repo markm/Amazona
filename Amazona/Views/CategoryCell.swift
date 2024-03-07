@@ -10,7 +10,6 @@ import UIKit
 import EasyPeasy
 import RxSwift
 
-
 class CategoryCell: UICollectionViewCell {
     
     weak var delegate: CategoryCellDelegate?

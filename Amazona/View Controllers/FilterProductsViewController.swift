@@ -15,8 +15,6 @@ class FilterProductsViewController: UIViewController {
     
     var viewModel: FilterProductsViewModel
     
-    var selectedCategorySubject = BehaviorSubject<Category?>(value: nil)
-    
     private let doneButton = UIButton()
     private let resetButton = UIButton()
     private let sortOptionsTableView = UITableView()
@@ -249,15 +247,17 @@ extension FilterProductsViewController: UICollectionViewDelegate {
 
 extension FilterProductsViewController: CategoryCellDelegate {
     func categoryCell(_ cell: CategoryCell, didTapButtonFor category: Category) {
-        
         guard let indexPath = categoriesCollectionView.indexPath(for: cell) else { return }
 
         /// Toggle the selection state and update UI
         let isSelected = !category.isSelected.value
         category.isSelected.accept(isSelected)
         
-        selectedCategorySubject.onNext(category)
-
+        if isSelected {
+            viewModel.selectCategory(atIndex: indexPath.row)
+        } else {
+            viewModel.deselectCategory(atIndex: indexPath.row)
+        }
         /// Explicitly reconfigure the cell to reflect the updated state
         if let updatedCell = categoriesCollectionView.cellForItem(at: indexPath) as? CategoryCell {
             updatedCell.configure(with: category)
