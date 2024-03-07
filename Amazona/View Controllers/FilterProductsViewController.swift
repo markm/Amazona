@@ -13,7 +13,7 @@ import EasyPeasy
 
 class FilterProductsViewController: UIViewController {
     
-    var viewModel: FilterProductsViewModel
+    var viewModel: ProductsViewModel
     
     private let doneButton = UIButton()
     private let resetButton = UIButton()
@@ -70,7 +70,7 @@ class FilterProductsViewController: UIViewController {
     
     // MARK: - Initializers
     
-    init(viewModel: FilterProductsViewModel) {
+    init(viewModel: ProductsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }

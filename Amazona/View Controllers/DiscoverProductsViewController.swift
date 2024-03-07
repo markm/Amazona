@@ -15,7 +15,7 @@ class DiscoverProductsViewController: UIViewController {
     
     private var products: [Product] = []
     private var cardWidth: CGFloat = 0 /// Card width will be set based on the scrollView's width
-    private let viewModel = DiscoverNewProductsViewModel()
+    private let viewModel = ProductsViewModel()
     private let disposeBag = DisposeBag()
 
     /// UI Components
@@ -74,6 +74,7 @@ class DiscoverProductsViewController: UIViewController {
         layoutViews()
         configureScrollView()
         bindToProducts()
+        bindToSelectedCategories()
         fetchProducts()
         title = "Discover New Products"
     }
@@ -114,11 +115,6 @@ class DiscoverProductsViewController: UIViewController {
         view.addSubview(titleLabel)
         view.addSubview(pageControl)
         view.addSubview(activityIndicator)
-        
-        /// Set the initial content offset to zero to start with the first card centered
-        DispatchQueue.main.async {
-            self.scrollView.contentOffset = CGPoint.zero
-        }
     }
     
     private func setupFilterButton() {
@@ -188,7 +184,10 @@ class DiscoverProductsViewController: UIViewController {
     }
     
     private func layoutProductCards() {
-        guard !products.isEmpty else { return }
+        /// Set the initial content offset to zero to start with the first card centered
+        DispatchQueue.main.async {
+            self.scrollView.contentOffset = CGPoint.zero
+        }
         
         let cardHeight = scrollView.frame.height - 20
         let pageWidth = view.bounds.width
@@ -235,31 +234,8 @@ class DiscoverProductsViewController: UIViewController {
     
     // MARK: - Actions
     
-    @objc private func presentFilterProductsViewController() {
-        /// Create the filter products view model with our view model's categories, which were set after fetching the products
-        let filterProductsViewModel = FilterProductsViewModel(categories: viewModel.categories)
-        
-        /**
-         Observe the selected categories from the filter products view model, and filter the products accordingly
-         */
-        filterProductsViewModel.selectedCategories
-            .observe(on: MainScheduler.instance) /// Ensure UI updates are performed on the main thread.
-            .subscribe(onNext: { [weak self] selectedCategories in
-                guard let self else { return }
-                
-                print("selected categories: \(selectedCategories)")
-                
-                /**
-                 Filter the original products based on the selected categories
-                 */
-                self.products = self.viewModel.originalProducts.filter {
-                    selectedCategories.map { $0.name }.contains($0.category)
-                }
-                viewModel.updateProducts(with: self.products)
-            })
-            .disposed(by: disposeBag)
-        
-        let filterProductsViewController = FilterProductsViewController(viewModel: filterProductsViewModel)
+    @objc private func presentFilterProductsViewController() {        
+        let filterProductsViewController = FilterProductsViewController(viewModel: viewModel)
         if #available(iOS 13.0, *) {
             filterProductsViewController.modalPresentationStyle = .pageSheet
             filterProductsViewController.isModalInPresentation = false /// allows swipe down to dismiss
@@ -321,12 +297,34 @@ class DiscoverProductsViewController: UIViewController {
     
     private func bindToProducts() {
         viewModel.products
-            .observe(on: MainScheduler.instance) /// Ensure UI updates are performed on the main thread.
+            .observe(on: MainScheduler.instance) /// ensure UI updates are performed on the main thread.
             .subscribe(onNext: { [weak self] products in
                 self?.products = products
                 self?.configureScrollView()
                 self?.layoutProductCards()
                 self?.pageControl.numberOfPages = products.count
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindToSelectedCategories() {
+        /**
+         Observe the selected categories from the view model, and filter the products accordingly
+         */
+        viewModel.selectedCategories
+            .observe(on: MainScheduler.instance) /// ensure UI updates are performed on the main thread.
+            .subscribe(onNext: { [weak self] selectedCategories in
+                guard let self else { return }
+                
+                print("selected categories: \(selectedCategories)")
+                
+                /**
+                 Filter the original products based on the selected categories
+                 */
+                self.products = self.viewModel.originalProducts.filter {
+                    selectedCategories.map { $0.name }.contains($0.category)
+                }
+                viewModel.updateProducts(with: self.products)
             })
             .disposed(by: disposeBag)
     }
