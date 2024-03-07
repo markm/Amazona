@@ -316,9 +316,6 @@ class DiscoverProductsViewController: UIViewController {
             .observe(on: MainScheduler.instance) /// ensure UI updates are performed on the main thread.
             .subscribe(onNext: { [weak self] selectedCategories in
                 guard let self else { return }
-                
-                print("selected categories: \(selectedCategories)")
-                
                 /**
                  Filter the original products based on the selected categories
                  */
@@ -338,19 +335,19 @@ class DiscoverProductsViewController: UIViewController {
             .observe(on: MainScheduler.instance) /// ensure UI updates are performed on the main thread.
             .subscribe(onNext: { [weak self] selectedSortOption in
                 guard let self, let selectedSortOption else { return }
-                
-                print("selected sort option: \(selectedSortOption)")
-                
-                // sort the products by rating
-                
-                
                 /**
-                 Filter the original products based on the selected categories
+                 Sort the products based on the selected sort option
                  */
-//                self.products = self.viewModel.originalProducts.filter {
-//                    selectedCategories.map { $0.name }.contains($0.category)
-//                }
-//                viewModel.updateProducts(with: self.products)
+                var sortedProducts: [Product] = []
+                switch selectedSortOption {
+                case .topRated:
+                    sortedProducts = products.sorted { ($0.rating?.rate ?? -1) > ($1.rating?.rate ?? -1) }
+                case .costHighToLow:
+                    sortedProducts = products.sorted { $0.price > $1.price }
+                case .costLowToHigh:
+                    sortedProducts = products.sorted { $0.price < $1.price }
+                }
+                viewModel.updateProducts(with: sortedProducts)
             })
             .disposed(by: disposeBag)
     }
