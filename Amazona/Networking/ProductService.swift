@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-class ProductService {
+class ProductService: ProductServiceProtocol {
 
     @MainActor
     func fetchProducts() async throws -> [Product] {

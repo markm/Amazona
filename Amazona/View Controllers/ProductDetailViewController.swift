@@ -1,5 +1,5 @@
 //
-//  ProductViewController.swift
+//  ProductDetailViewController.swift
 //  Amazona
 //
 //  Created by Mark Mckelvie on 3/4/24.
@@ -8,7 +8,7 @@
 import UIKit
 import EasyPeasy
 
-class ProductViewController: UIViewController {
+class ProductDetailViewController: UIViewController {
     
     var product: Product
     

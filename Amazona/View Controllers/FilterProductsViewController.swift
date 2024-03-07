@@ -267,12 +267,12 @@ extension FilterProductsViewController: CategoryCellDelegate {
 
 extension FilterProductsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.sortOptions.count
+        kSortOptions.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: kSortOptionCellIdentifier, for: indexPath)
-        cell.textLabel?.text = viewModel.sortOptions[indexPath.row].rawValue
+        cell.textLabel?.text = kSortOptions[indexPath.row].rawValue
         let isSelected = viewModel.isSortOptionSelected(atIndex: indexPath.row)
         cell.accessoryType = isSelected ? .checkmark : .none
         cell.tintColor = isSelected ? .AmazonaMagenta : .AmazonaGrey

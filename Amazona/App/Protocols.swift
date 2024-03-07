@@ -10,3 +10,7 @@ import Foundation
 protocol CategoryCellDelegate: AnyObject {
     func categoryCell(_ cell: CategoryCell, didTapButtonFor category: Category)
 }
+
+protocol ProductServiceProtocol {
+    func fetchProducts() async throws -> [Product]
+}

@@ -16,3 +16,7 @@ let kCornerRadius = CGFloat(16)
 let kSearchTextFieldHeight = CGFloat(44)
 let kCategoryCellIdentifier = "CategoryCell"
 let kSortOptionCellIdentifier = "SortOptionCell"
+
+let kSortOptions = [ProductSortOption.topRated,
+                    ProductSortOption.costHighToLow,
+                    ProductSortOption.costLowToHigh]

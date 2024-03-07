@@ -15,7 +15,7 @@ class DiscoverProductsViewController: UIViewController {
     
     private var products: [Product] = []
     private var cardWidth: CGFloat = 0 /// Card width will be set based on the scrollView's width
-    private let viewModel = ProductsViewModel()
+    private let viewModel = ProductsViewModel(productService: ProductService())
     private let disposeBag = DisposeBag()
 
     /// UI Components
@@ -134,6 +134,7 @@ class DiscoverProductsViewController: UIViewController {
         searchTextField.textAlignment = .left
         searchTextField.leftViewMode = .always
         searchTextField.delegate = self
+        searchTextField.accessibilityIdentifier = "SearchTextField" /// for UI testing
         addDoneButtonToSearchKeyboard()
     }
     
@@ -250,7 +251,7 @@ class DiscoverProductsViewController: UIViewController {
         guard let cardView = recognizer.view else { return }
         let productIndex = cardView.tag
         let product = products[productIndex]
-        let productViewController = ProductViewController(product: product)
+        let productViewController = ProductDetailViewController(product: product)
         navigationController?.pushViewController(productViewController, animated: true)
     }
     
@@ -335,19 +336,9 @@ class DiscoverProductsViewController: UIViewController {
             .observe(on: MainScheduler.instance) /// ensure UI updates are performed on the main thread.
             .subscribe(onNext: { [weak self] selectedSortOption in
                 guard let self, let selectedSortOption else { return }
-                /**
-                 Sort the products based on the selected sort option
-                 */
-                var sortedProducts: [Product] = []
-                switch selectedSortOption {
-                case .topRated:
-                    sortedProducts = products.sorted { ($0.rating?.rate ?? -1) > ($1.rating?.rate ?? -1) }
-                case .costHighToLow:
-                    sortedProducts = products.sorted { $0.price > $1.price }
-                case .costLowToHigh:
-                    sortedProducts = products.sorted { $0.price < $1.price }
-                }
-                viewModel.updateProducts(with: sortedProducts)
+                
+                /// Sort the products based on the selected sort option and publish the sorted products
+                viewModel.sortProducts(products, withSortOption: selectedSortOption)
             })
             .disposed(by: disposeBag)
     }

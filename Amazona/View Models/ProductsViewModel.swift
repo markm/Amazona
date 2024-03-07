@@ -14,16 +14,12 @@ class ProductsViewModel {
     var categories: [Category] = []
     var originalProducts: [Product] = []
     
-    let sortOptions = [ProductSortOption.topRated,
-                       ProductSortOption.costHighToLow,
-                       ProductSortOption.costLowToHigh]
+    let productsRelay = BehaviorRelay<[Product]>(value: [])
+    let selectedCategoriesRelay = BehaviorRelay<[Category]>(value: [])
+    let selectedSortOptionRelay = BehaviorRelay<ProductSortOption?>(value: nil)
     
-    private let productService = ProductService()
+    private let productService: ProductServiceProtocol
     private var lastSelectedSortOption: ProductSortOption?
-    
-    private let productsRelay = BehaviorRelay<[Product]>(value: [])
-    private let selectedCategoriesRelay = BehaviorRelay<[Category]>(value: [])
-    private let selectedSortOptionRelay = BehaviorRelay<ProductSortOption?>(value: nil)
     
     var selectedCategories: Observable<[Category]> {
         selectedCategoriesRelay.asObservable()
@@ -37,6 +33,12 @@ class ProductsViewModel {
         selectedSortOptionRelay.asObservable()
     }
     
+    // MARK: - Initializers
+    
+    init(productService: ProductServiceProtocol) {
+        self.productService = productService
+    }
+    
     // MARK: - Public Methods
     
     @MainActor
@@ -44,12 +46,12 @@ class ProductsViewModel {
         let products = try await productService.fetchProducts()
         originalProducts = products
         
-        // unique the categories
+        /// unique the categories
         let uniqueCategoryStrings = Array(Set(products.map { $0.category }))
         categories = uniqueCategoryStrings.map { Category(name: $0) }.sorted(by: <)
         productsRelay.accept(products)
         
-        // select all categories by default
+        /// select all categories by default
         categories.forEach { $0.isSelected.accept(true) }
         selectedCategoriesRelay.accept(categories)
     }
@@ -60,14 +62,19 @@ class ProductsViewModel {
     
     func isSortOptionSelected(atIndex index: Int) -> Bool {
         /// ensure index is within bounds
-        guard index >= 0 && index < sortOptions.count else { return false }
-        return sortOptions[index] == lastSelectedSortOption
+        guard index >= 0 && index < kSortOptions.count else { return false }
+        return kSortOptions[index] == lastSelectedSortOption
     }
     
     func selectSortOption(atIndex index: Int) {
-        let selectedOption = sortOptions[index]
+        let selectedOption = kSortOptions[index]
         lastSelectedSortOption = selectedOption /// keep track of this for later
         selectedSortOptionRelay.accept(selectedOption)
+    }
+    
+    func selectSortOption(_ option: ProductSortOption) {
+        lastSelectedSortOption = option /// keep track of this for later
+        selectedSortOptionRelay.accept(option)
     }
     
     func selectCategory(atIndex index: Int) {
@@ -82,5 +89,18 @@ class ProductsViewModel {
     
     func setSelectedCategories(_ categories: [Category]) {
         selectedCategoriesRelay.accept(categories)
+    }
+    
+    func sortProducts(_ products: [Product], withSortOption sortOption: ProductSortOption) {
+        var sortedProducts: [Product] = []
+        switch sortOption {
+        case .topRated:
+            sortedProducts = products.sorted { ($0.rating?.rate ?? -1) > ($1.rating?.rate ?? -1) }
+        case .costHighToLow:
+            sortedProducts = products.sorted { $0.price > $1.price }
+        case .costLowToHigh:
+            sortedProducts = products.sorted { $0.price < $1.price }
+        }
+        productsRelay.accept(sortedProducts)
     }
 }

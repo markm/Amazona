@@ -9,6 +9,7 @@ import Foundation
 import RealmSwift
 
 class Product: Object, Decodable {
+    
     @Persisted(primaryKey: true) var id: Int
     @Persisted var title: String = ""
     @Persisted var price: Double = 0
@@ -26,11 +27,38 @@ class Product: Object, Decodable {
         case imageURLString = "image"
         case rating
     }
+    
+    // MARK: - Initializers
+    
+    convenience init(id: Int, 
+                     title: String,
+                     price: Double,
+                     descriptionText: String,
+                     category: String,
+                     imageURLString: String,
+                     rating: Rating?) {
+        self.init()
+        self.id = id
+        self.title = title
+        self.price = price
+        self.descriptionText = descriptionText
+        self.category = category
+        self.imageURLString = imageURLString
+        self.rating = rating
+    }
 }
 
 class Rating: EmbeddedObject, Decodable, Comparable {
     @Persisted var rate: Double
     @Persisted var count: Int
+    
+    // MARK: - Initializers
+    
+    convenience init(rate: Double, count: Int) {
+        self.init()
+        self.rate = rate
+        self.count = count
+    }
     
     /// Protocol conformances
     static func < (lhs: Rating, rhs: Rating) -> Bool { lhs.rate < rhs.rate }
