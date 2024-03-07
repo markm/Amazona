@@ -19,10 +19,11 @@ class ProductsViewModel {
                        ProductSortOption.costLowToHigh]
     
     private let productService = ProductService()
-    private var selectedSortOption: ProductSortOption?
+    private var lastSelectedSortOption: ProductSortOption?
     
     private let productsRelay = BehaviorRelay<[Product]>(value: [])
     private let selectedCategoriesRelay = BehaviorRelay<[Category]>(value: [])
+    private let selectedSortOptionRelay = BehaviorRelay<ProductSortOption?>(value: nil)
     
     var selectedCategories: Observable<[Category]> {
         selectedCategoriesRelay.asObservable()
@@ -30,6 +31,10 @@ class ProductsViewModel {
     
     var products: Observable<[Product]> {
         productsRelay.asObservable()
+    }
+    
+    var selectedSortOption: Observable<ProductSortOption?> {
+        selectedSortOptionRelay.asObservable()
     }
     
     // MARK: - Public Methods
@@ -54,11 +59,15 @@ class ProductsViewModel {
     }
     
     func isSortOptionSelected(atIndex index: Int) -> Bool {
-        selectedSortOption == sortOptions[index]
+        /// ensure index is within bounds
+        guard index >= 0 && index < sortOptions.count else { return false }
+        return sortOptions[index] == lastSelectedSortOption
     }
     
     func selectSortOption(atIndex index: Int) {
-        selectedSortOption = sortOptions[index]
+        let selectedOption = sortOptions[index]
+        lastSelectedSortOption = selectedOption /// keep track of this for later
+        selectedSortOptionRelay.accept(selectedOption)
     }
     
     func selectCategory(atIndex index: Int) {

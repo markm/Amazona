@@ -18,8 +18,6 @@ class FilterProductsViewController: UIViewController {
     private let doneButton = UIButton()
     private let resetButton = UIButton()
     private let sortOptionsTableView = UITableView()
-    private let selectedCategory: Category? = nil
-    private var selectedPriceRange: ClosedRange<Double> = 0.0...100.0
     private var categoriesCollectionView = UICollectionView(frame: .zero,
                                                             collectionViewLayout: UICollectionViewFlowLayout())
     private let disposeBag = DisposeBag()

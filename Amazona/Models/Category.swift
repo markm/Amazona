@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class Category: Comparable {
+class Category: Comparable, Equatable {
     
     var name: String
     var isSelected: BehaviorRelay<Bool>
@@ -19,7 +19,7 @@ class Category: Comparable {
         self.isSelected = BehaviorRelay(value: isSelected)
     }
     
-    /// Comparable conformance
+    /// Protocol conformances
     static func < (lhs: Category, rhs: Category) -> Bool { lhs.name < rhs.name }
     static func == (lhs: Category, rhs: Category) -> Bool { lhs.name == rhs.name }
 }

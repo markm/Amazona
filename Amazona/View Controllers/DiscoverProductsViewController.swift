@@ -75,6 +75,7 @@ class DiscoverProductsViewController: UIViewController {
         configureScrollView()
         bindToProducts()
         bindToSelectedCategories()
+        bindToSelectedSortOption()
         fetchProducts()
         title = "Discover New Products"
     }
@@ -325,6 +326,31 @@ class DiscoverProductsViewController: UIViewController {
                     selectedCategories.map { $0.name }.contains($0.category)
                 }
                 viewModel.updateProducts(with: self.products)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindToSelectedSortOption() {
+        /**
+         Observe the selected sort option from the view model, and sort the products accordingly
+         */
+        viewModel.selectedSortOption
+            .observe(on: MainScheduler.instance) /// ensure UI updates are performed on the main thread.
+            .subscribe(onNext: { [weak self] selectedSortOption in
+                guard let self, let selectedSortOption else { return }
+                
+                print("selected sort option: \(selectedSortOption)")
+                
+                // sort the products by rating
+                
+                
+                /**
+                 Filter the original products based on the selected categories
+                 */
+//                self.products = self.viewModel.originalProducts.filter {
+//                    selectedCategories.map { $0.name }.contains($0.category)
+//                }
+//                viewModel.updateProducts(with: self.products)
             })
             .disposed(by: disposeBag)
     }

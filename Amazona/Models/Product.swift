@@ -28,8 +28,11 @@ class Product: Object, Decodable {
     }
 }
 
-class Rating: EmbeddedObject, Decodable {
+class Rating: EmbeddedObject, Decodable, Comparable {
     @Persisted var rate: Double
     @Persisted var count: Int
+    
+    /// Protocol conformances
+    static func < (lhs: Rating, rhs: Rating) -> Bool { lhs.rate < rhs.rate }
 }
 
