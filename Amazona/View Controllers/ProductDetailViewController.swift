@@ -12,6 +12,17 @@ class ProductDetailViewController: UIViewController {
     
     var product: Product
     
+    private lazy var scrollView: UIScrollView = {
+         let scrollView = UIScrollView()
+         scrollView.showsVerticalScrollIndicator = true
+         return scrollView
+     }()
+     
+     private let contentView: UIView = {
+         let view = UIView()
+         return view
+     }()
+    
     private let productImageView: UIImageView = {
         let productImageView = UIImageView()
         productImageView.contentMode = .scaleAspectFit
@@ -153,47 +164,61 @@ class ProductDetailViewController: UIViewController {
     // MARK: - Setup Methods for UI Elements
     
     private func setupViews() {
-        view.addSubview(productImageView)
-        view.addSubview(titleLabel)
-        view.addSubview(descriptionLabel)
-        view.addSubview(ratingStackView)
-        view.addSubview(buyNowButton)
-        
-        bottomStackView.addArrangedSubview(categoryContainerView)
-        bottomStackView.addArrangedSubview(priceLabel)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+
+        contentView.addSubview(productImageView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(descriptionLabel)
+        contentView.addSubview(ratingStackView)
+        contentView.addSubview(buyNowButton)
+
         ratingStackView.addArrangedSubview(ratingStarImageView)
         ratingStackView.addArrangedSubview(ratingLabel)
         ratingStackView.addArrangedSubview(ratingCountLabel)
-        
-        view.addSubview(bottomStackView)
+
+        contentView.addSubview(bottomStackView)
+        bottomStackView.addArrangedSubview(categoryContainerView)
+        bottomStackView.addArrangedSubview(priceLabel)
+
         categoryContainerView.addSubview(categoryLabel)
-        
+
         buyNowButton.addTarget(self, action: #selector(buyNowWasSelected), for: .touchUpInside)
     }
     
     // MARK: - Layout Methods for UI Elements
     
     private func layoutViews() {
+        scrollView.easy.layout(
+            Edges(),
+            Width().like(view)
+        )
+
+        contentView.easy.layout(
+            Edges(),
+            Width().like(scrollView)
+        )
+        
         productImageView.easy.layout(
-            Top(kMediumPadding).to(view.safeAreaLayoutGuide, .top),
+            Top(kMediumPadding).to(contentView.safeAreaLayoutGuide, .top),
             CenterX(),
-            Height(*0.45).like(view.safeAreaLayoutGuide, .height),
-            Leading(kMediumPadding).to(view.safeAreaLayoutGuide, .leading),
-            Trailing(kMediumPadding).to(view.safeAreaLayoutGuide, .trailing)
+            Height(*0.45).like(view, .height), // relate to view's height instead of contentView's safeAreaLayoutGuide
+            Leading(kMediumPadding).to(contentView.safeAreaLayoutGuide, .leading),
+            Trailing(kMediumPadding).to(contentView.safeAreaLayoutGuide, .trailing)
         )
         
         titleLabel.easy.layout(
             Top(kMediumPadding).to(productImageView, .bottom),
             CenterX(),
-            Leading(kMediumPadding).to(view.safeAreaLayoutGuide, .leading),
-            Trailing(kMediumPadding).to(view.safeAreaLayoutGuide, .trailing)
+            Leading(kMediumPadding).to(contentView.safeAreaLayoutGuide, .leading),
+            Trailing(kMediumPadding).to(contentView.safeAreaLayoutGuide, .trailing)
         )
         
         descriptionLabel.easy.layout(
             Top(kSmallPadding).to(titleLabel, .bottom),
             CenterX(),
-            Leading(kMediumPadding).to(view.safeAreaLayoutGuide, .leading),
-            Trailing(kMediumPadding).to(view.safeAreaLayoutGuide, .trailing)
+            Leading(kMediumPadding).to(contentView.safeAreaLayoutGuide, .leading),
+            Trailing(kMediumPadding).to(contentView.safeAreaLayoutGuide, .trailing)
         )
         
         ratingStackView.easy.layout(
@@ -224,7 +249,8 @@ class ProductDetailViewController: UIViewController {
             Top(kMediumPadding).to(bottomStackView, .bottom),
             Leading(kSmallPadding),
             Trailing(kSmallPadding),
-            Height(50)
+            Height(50),
+            Bottom(kMediumPadding).to(contentView, .bottom) // This is crucial
         )
     }
     
