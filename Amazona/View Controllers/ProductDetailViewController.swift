@@ -268,9 +268,12 @@ class ProductDetailViewController: UIViewController {
         /// Load image from URL
         if let imageURL = URL(string: product.imageURLString) {
             URLSession.shared.dataTask(with: imageURL) { (data, _, error) in
-                if let data = data {
-                    DispatchQueue.main.async {
+                DispatchQueue.main.async {
+                    if let data = data {
                         self.productImageView.image = UIImage(data: data)
+                    } else if let error = error {
+                        print("Error loading image: \(error.localizedDescription)")
+                        self.showErrorAlert(error)
                     }
                 }
             }.resume()

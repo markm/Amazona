@@ -220,6 +220,8 @@ class ProductCardView: UIView {
                     DispatchQueue.main.async {
                         self.productImageView.image = UIImage(data: data)
                     }
+                } else if let error = error {
+                    print("Error loading image: \(error.localizedDescription)")
                 }
             }.resume()
         }

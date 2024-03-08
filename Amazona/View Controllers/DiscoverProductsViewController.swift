@@ -93,8 +93,14 @@ class DiscoverProductsViewController: UIViewController {
         scrollView.subviews.forEach { $0.removeFromSuperview() }
         activityIndicator.startAnimating()
         Task {
-            try await viewModel.fetchProducts()
-            self.activityIndicator.stopAnimating()
+            do {
+                try await viewModel.fetchProducts()
+                self.activityIndicator.stopAnimating()
+            } catch {
+                print("ERROR: fetching products: \(error.localizedDescription)")
+                showErrorAlert(error)
+                self.activityIndicator.stopAnimating()
+            }
         }
     }
     
@@ -286,15 +292,6 @@ class DiscoverProductsViewController: UIViewController {
         doneToolbar.items = items
         doneToolbar.sizeToFit()
         searchTextField.inputAccessoryView = doneToolbar
-    }
-
-    private func showErrorAlert(_ error: Error) {
-        let alertController = UIAlertController(title: "Error",
-                                                message: error.localizedDescription,
-                                                preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alertController.addAction(okAction)
-        self.present(alertController, animated: true, completion: nil)
     }
     
     private func bindToProducts() {

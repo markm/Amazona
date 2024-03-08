@@ -10,6 +10,7 @@
 		A03AB91B2B959A870044E3D4 /* ProductCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB91A2B959A870044E3D4 /* ProductCardView.swift */; };
 		A03AB91D2B95AF8E0044E3D4 /* AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB91C2B95AF8E0044E3D4 /* AppFonts.swift */; };
 		A03AB91F2B95BF820044E3D4 /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB91E2B95BF820044E3D4 /* ProductDetailViewController.swift */; };
+		A0731ED72B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0731ED62B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift */; };
 		A09647302B967B2C004D8A60 /* DiscoverProductsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A096472F2B967B2C004D8A60 /* DiscoverProductsViewController.swift */; };
 		A09700CF2B9A45220042AF2F /* MockProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09700CE2B9A45220042AF2F /* MockProductService.swift */; };
 		A0AFC2F52B93E4E70004D0E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC2F42B93E4E70004D0E0 /* AppDelegate.swift */; };
@@ -60,6 +61,7 @@
 		A03AB91A2B959A870044E3D4 /* ProductCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCardView.swift; sourceTree = "<group>"; };
 		A03AB91C2B95AF8E0044E3D4 /* AppFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFonts.swift; sourceTree = "<group>"; };
 		A03AB91E2B95BF820044E3D4 /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
+		A0731ED62B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ErrorHandling.swift"; sourceTree = "<group>"; };
 		A096472F2B967B2C004D8A60 /* DiscoverProductsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverProductsViewController.swift; sourceTree = "<group>"; };
 		A09700CE2B9A45220042AF2F /* MockProductService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockProductService.swift; sourceTree = "<group>"; };
 		A0AFC2F12B93E4E70004D0E0 /* Amazona.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Amazona.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -227,6 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				A0AFC3492B940AA00004D0E0 /* UIColor+CustomColors.swift */,
+				A0731ED62B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -394,6 +397,7 @@
 				A0AFC2F72B93E4E70004D0E0 /* SceneDelegate.swift in Sources */,
 				A09700CF2B9A45220042AF2F /* MockProductService.swift in Sources */,
 				A0AFC33A2B93E8820004D0E0 /* ProductService.swift in Sources */,
+				A0731ED72B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift in Sources */,
 				A03AB91B2B959A870044E3D4 /* ProductCardView.swift in Sources */,
 				A0AFC34A2B940AA00004D0E0 /* UIColor+CustomColors.swift in Sources */,
 				A0AFC3452B93F2750004D0E0 /* ProductsViewModel.swift in Sources */,
