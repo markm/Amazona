@@ -57,7 +57,11 @@ class ProductsViewModel {
     }
     
     func updateProducts(with products: [Product]) {
-        productsRelay.accept(products)
+        if let lastSelectedSortOption {
+            sortProducts(products, withSortOption: lastSelectedSortOption)
+        } else {
+            productsRelay.accept(products)
+        }
     }
     
     func isSortOptionSelected(atIndex index: Int) -> Bool {

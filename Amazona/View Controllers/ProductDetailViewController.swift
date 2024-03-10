@@ -271,7 +271,7 @@ class ProductDetailViewController: UIViewController {
                 DispatchQueue.main.async {
                     if let data = data {
                         self.productImageView.image = UIImage(data: data)
-                    } else if let error = error {
+                    } else if let error {
                         print("Error loading image: \(error.localizedDescription)")
                         self.showErrorAlert(error)
                     }

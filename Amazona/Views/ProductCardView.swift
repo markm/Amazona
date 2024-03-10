@@ -216,11 +216,11 @@ class ProductCardView: UIView {
         /// Load image from URL
         if let imageURL = URL(string: product.imageURLString) {
             URLSession.shared.dataTask(with: imageURL) { (data, _, error) in
-                if let data = data {
+                if let data {
                     DispatchQueue.main.async {
                         self.productImageView.image = UIImage(data: data)
                     }
-                } else if let error = error {
+                } else if let error {
                     print("Error loading image: \(error.localizedDescription)")
                 }
             }.resume()

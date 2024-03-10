@@ -19,9 +19,9 @@ class DiscoverProductsViewController: UIViewController {
     private let disposeBag = DisposeBag()
 
     /// UI Components
-    private let scrollView = UIScrollView()
-    private let searchTextField = UITextField()
     private let filterButton = UIButton()
+    private let searchTextField = UITextField()
+    private let horizontalScrollView = UIScrollView()
     
     private let searchStackView: UIStackView = {
         let searchStackView = UIStackView()
@@ -100,8 +100,6 @@ class DiscoverProductsViewController: UIViewController {
 
     @MainActor
     private func fetchProducts() {
-        /// make sure the UI is starting from scratch
-        scrollView.subviews.forEach { $0.removeFromSuperview() }
         activityIndicator.startAnimating()
         Task {
             do {
@@ -118,7 +116,7 @@ class DiscoverProductsViewController: UIViewController {
     // MARK: - Setup Methods for UI Elements
     
     private func setupViews() {
-        setupScrollView()
+        setupHorizontalScrollView()
         setupFilterButton()
         setupSearchTextField()
         
@@ -127,9 +125,9 @@ class DiscoverProductsViewController: UIViewController {
         searchStackView.addArrangedSubview(searchTextField)
         searchStackView.addArrangedSubview(filterButton)
         
-        view.addSubview(scrollView)
+        view.addSubview(horizontalScrollView)
         view.addSubview(searchStackView)
-        view.addSubview(scrollView)
+        view.addSubview(horizontalScrollView)
         view.addSubview(titleLabel)
         view.addSubview(pageControl)
         view.addSubview(activityIndicator)
@@ -154,10 +152,10 @@ class DiscoverProductsViewController: UIViewController {
         addDoneButtonToSearchKeyboard()
     }
     
-    private func setupScrollView() {
-        scrollView.delegate = self
-        scrollView.isPagingEnabled = true
-        scrollView.showsHorizontalScrollIndicator = false
+    private func setupHorizontalScrollView() {
+        horizontalScrollView.delegate = self
+        horizontalScrollView.isPagingEnabled = true
+        horizontalScrollView.showsHorizontalScrollIndicator = false
     }
     
     // MARK: - Layout Methods for UI Elements
@@ -185,13 +183,13 @@ class DiscoverProductsViewController: UIViewController {
             Trailing(kMediumPadding),
             Height(kTitleHeight)
         )
-        scrollView.easy.layout(
+        horizontalScrollView.easy.layout(
             Top(kSmallPadding).to(titleLabel, .bottom),
             Leading(),
             Trailing()
         )
         pageControl.easy.layout(
-            Top(kSmallPadding).to(scrollView, .bottom),
+            Top(kSmallPadding).to(horizontalScrollView, .bottom),
             CenterX(),
             Height(kSmallSquareSize),
             Bottom(kSmallPadding).to(view.safeAreaLayoutGuide, .bottom)
@@ -202,17 +200,11 @@ class DiscoverProductsViewController: UIViewController {
     }
     
     private func layoutProductCards() {
-        /// Set the initial content offset to zero to start with the first card centered
-        DispatchQueue.main.async {
-            self.scrollView.contentOffset = CGPoint.zero
-        }
+        resetHorizontalScrollView()
         
-        let cardHeight = scrollView.frame.height - 20
+        let cardHeight = horizontalScrollView.frame.height - 20
         let pageWidth = view.bounds.width
         var xOffset: CGFloat = 0
-
-        /// First, remove any existing product card views from the scrollView
-        scrollView.subviews.forEach { $0.removeFromSuperview() }
 
         for (index, product) in products.enumerated() {
             let productCardView = ProductCardView(product: product)
@@ -225,7 +217,7 @@ class DiscoverProductsViewController: UIViewController {
                                            y: kSmallPadding,
                                            width: cardWidth,
                                            height: cardHeight)
-            scrollView.addSubview(productCardView)
+            horizontalScrollView.addSubview(productCardView)
 
             /// Increment xOffset for the next page
             xOffset += pageWidth
@@ -241,13 +233,13 @@ class DiscoverProductsViewController: UIViewController {
         }
 
         /// The contentSize width is the xOffset after all cards have been laid out
-        scrollView.contentSize = CGSize(width: xOffset, height: cardHeight)
+        horizontalScrollView.contentSize = CGSize(width: xOffset, height: cardHeight)
     }
     
     private func configureScrollView() {
         cardWidth = view.frame.width * 0.8 /// cards take up 80% of the view's width
         let sidePadding = (view.frame.width - cardWidth) / 2
-        scrollView.contentInset = UIEdgeInsets(top: 0, left: sidePadding, bottom: 0, right: sidePadding)
+        horizontalScrollView.contentInset = UIEdgeInsets(top: 0, left: sidePadding, bottom: 0, right: sidePadding)
     }
     
     // MARK: - Actions
@@ -284,8 +276,8 @@ class DiscoverProductsViewController: UIViewController {
                                                                   height: kToolbarHeight))
         /// Customize the toolbar appearance
         doneToolbar.barStyle = .default
-        doneToolbar.barTintColor = UIColor.darkGray /// Background color
-        doneToolbar.tintColor = UIColor.white /// Tint color of the button
+        doneToolbar.barTintColor = UIColor.darkGray /// background color
+        doneToolbar.tintColor = UIColor.white /// button color
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let doneBarButton: UIBarButtonItem = UIBarButtonItem(title: kDoneTitle,
                                                              style: .done,
@@ -302,6 +294,11 @@ class DiscoverProductsViewController: UIViewController {
         doneToolbar.items = items
         doneToolbar.sizeToFit()
         searchTextField.inputAccessoryView = doneToolbar
+    }
+    
+    private func resetHorizontalScrollView() {
+        horizontalScrollView.subviews.forEach { $0.removeFromSuperview() }
+        horizontalScrollView.contentOffset = CGPoint.zero
     }
     
     private func bindToProducts() {
