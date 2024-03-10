@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-class Product: Object, Decodable {
+class Product: Object, Decodable, Comparable {
     
     @Persisted(primaryKey: true) var id: Int
     @Persisted var title: String = ""
@@ -47,6 +47,13 @@ class Product: Object, Decodable {
         self.rating = rating
     }
 }
+
+/// Protocol conformances
+extension Product {
+    static func < (lhs: Product, rhs: Product) -> Bool { lhs.title < rhs.title }
+}
+
+// MARK: - Rating (EmbeddedObject)
 
 class Rating: EmbeddedObject, Decodable, Comparable {
     @Persisted var rate: Double

@@ -14,13 +14,6 @@ class ProductsViewModel {
     var categories: [Category] = []
     var originalProducts: [Product] = []
     
-    let productsRelay = BehaviorRelay<[Product]>(value: [])
-    let selectedCategoriesRelay = BehaviorRelay<[Category]>(value: [])
-    let selectedSortOptionRelay = BehaviorRelay<ProductSortOption?>(value: nil)
-    
-    private let productService: ProductServiceProtocol
-    private var lastSelectedSortOption: ProductSortOption?
-    
     var selectedCategories: Observable<[Category]> {
         selectedCategoriesRelay.asObservable()
     }
@@ -32,6 +25,13 @@ class ProductsViewModel {
     var selectedSortOption: Observable<ProductSortOption?> {
         selectedSortOptionRelay.asObservable()
     }
+    
+    private let productsRelay = BehaviorRelay<[Product]>(value: [])
+    private let selectedCategoriesRelay = BehaviorRelay<[Category]>(value: [])
+    private let selectedSortOptionRelay = BehaviorRelay<ProductSortOption?>(value: nil)
+    
+    private let productService: ProductServiceProtocol
+    private var lastSelectedSortOption: ProductSortOption?
     
     // MARK: - Initializers
     
@@ -72,8 +72,12 @@ class ProductsViewModel {
     
     func selectSortOption(atIndex index: Int) {
         let selectedOption = kSortOptions[index]
-        lastSelectedSortOption = selectedOption /// keep track of this for later
-        selectedSortOptionRelay.accept(selectedOption)
+        if selectedOption == lastSelectedSortOption {
+            lastSelectedSortOption = nil
+        } else {
+            lastSelectedSortOption = selectedOption
+        }
+        selectedSortOptionRelay.accept(lastSelectedSortOption)
     }
     
     func selectSortOption(_ option: ProductSortOption) {
@@ -91,7 +95,11 @@ class ProductsViewModel {
         selectedCategoriesRelay.accept(categories.filter { $0.isSelected.value })
     }
     
-    func sortProducts(_ products: [Product], withSortOption sortOption: ProductSortOption) {
+    func sortProducts(_ products: [Product], withSortOption sortOption: ProductSortOption?) {
+        guard let sortOption else {
+            productsRelay.accept(products.sorted(by: <))
+            return
+        }
         var sortedProducts: [Product] = []
         switch sortOption {
         case .topRated:

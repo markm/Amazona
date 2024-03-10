@@ -339,7 +339,7 @@ class DiscoverProductsViewController: UIViewController {
         viewModel.selectedSortOption
             .observe(on: MainScheduler.instance) /// ensure UI updates are performed on the main thread.
             .subscribe(onNext: { [weak self] selectedSortOption in
-                guard let self, let selectedSortOption else { return }
+                guard let self else { return }
                 
                 /// Sort the products based on the selected sort option and publish the sorted products
                 viewModel.sortProducts(products, withSortOption: selectedSortOption)

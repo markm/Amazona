@@ -34,6 +34,6 @@ class ProductService: ProductServiceProtocol {
             default:
             throw NetworkError.unknown
         }
-        return products
+        return products.sorted(by: <)
     }
 }
