@@ -30,7 +30,7 @@ class CategoryCell: UICollectionViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(kInitNotImplementedErrorMessage)
     }
     
     // MARK: - Configuration
@@ -59,12 +59,12 @@ class CategoryCell: UICollectionViewCell {
     
     private func updateButtonAppearance(isSelected: Bool) {
         if isSelected {
-            button.layer.borderWidth = 1.0
+            button.layer.borderWidth = kBorderWidth
             button.layer.borderColor = UIColor.AmazonaMagenta.cgColor
             button.backgroundColor = .white
             button.setTitleColor(.AmazonaMagenta, for: .normal)
         } else {
-            button.layer.borderWidth = 1.0
+            button.layer.borderWidth = kBorderWidth
             button.layer.borderColor = UIColor.AmazonaGrey.cgColor
             button.backgroundColor = .white
             button.setTitleColor(.AmazonaGrey, for: .normal)

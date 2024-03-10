@@ -20,7 +20,6 @@ extension UIViewController {
         present(alertController, animated: true)
     }
     
-    // If you also want to handle an error with a custom message, you can add an overloaded function.
     func showErrorAlert(withMessage message: String) {
         let alertController = UIAlertController(title: "Error",
                                                 message: message,

@@ -8,14 +8,14 @@
 import UIKit
 import RxSwift
 import RxCocoa
-import RxDataSources
 import EasyPeasy
 
 class DiscoverProductsViewController: UIViewController {
     
+    let viewModel: ProductsViewModel
+    
     private var products: [Product] = []
     private var cardWidth: CGFloat = 0 /// Card width will be set based on the scrollView's width
-    private let viewModel = ProductsViewModel(productService: ProductService())
     private let disposeBag = DisposeBag()
 
     /// UI Components
@@ -43,9 +43,9 @@ class DiscoverProductsViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.text = "Discover New Products"
+        titleLabel.text = kDiscoverNewProductsTitle
         titleLabel.textColor = .black
-        titleLabel.font = AppFonts.helveticaNeue(ofSize: 26, weight: .bold)
+        titleLabel.font = AppFonts.helveticaNeue(ofSize: kTitleFontSize, weight: .bold)
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
         return titleLabel
@@ -53,7 +53,7 @@ class DiscoverProductsViewController: UIViewController {
     
     private let magnifyingGlassImageView: UIImageView = {
        let magnifyingGlassImageView = UIImageView()
-        magnifyingGlassImageView.image = UIImage(systemName: "magnifyingglass")
+        magnifyingGlassImageView.image = AppImages.magnifyingGlass
         magnifyingGlassImageView.contentMode = .center
         magnifyingGlassImageView.tintColor = .AmazonaGrey
         return magnifyingGlassImageView
@@ -65,6 +65,17 @@ class DiscoverProductsViewController: UIViewController {
         activityIndicator.hidesWhenStopped = true
         return activityIndicator
     }()
+    
+    // MARK: - Initializers
+    
+    init(viewModel: ProductsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError(kInitNotImplementedErrorMessage)
+    }
 
     // MARK: - Lifecycle
     
@@ -77,7 +88,7 @@ class DiscoverProductsViewController: UIViewController {
         bindToSelectedCategories()
         bindToSelectedSortOption()
         fetchProducts()
-        title = "Discover New Products"
+        title = kDiscoverNewProductsTitle
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -126,8 +137,7 @@ class DiscoverProductsViewController: UIViewController {
     
     private func setupFilterButton() {
         filterButton.tintColor = .AmazonaGrey
-        let filterButtonImage = UIImage(systemName: "line.3.horizontal.decrease.circle.fill")
-        filterButton.setBackgroundImage(filterButtonImage?.withRenderingMode(.alwaysTemplate), for: .normal)
+        filterButton.setBackgroundImage(AppImages.filter?.withRenderingMode(.alwaysTemplate), for: .normal)
         filterButton.addTarget(self, action: #selector(presentFilterProductsViewController), for: .touchUpInside)
         filterButton.imageView?.contentMode = .scaleAspectFit
     }
@@ -136,11 +146,11 @@ class DiscoverProductsViewController: UIViewController {
         searchTextField.layer.cornerRadius = kSearchTextFieldHeight / 2
         searchTextField.layer.borderWidth = 1
         searchTextField.layer.borderColor = UIColor.AmazonaGrey.cgColor
-        searchTextField.placeholder = "Search"
+        searchTextField.placeholder = kSearchTextFieldPlaceholder
         searchTextField.textAlignment = .left
         searchTextField.leftViewMode = .always
         searchTextField.delegate = self
-        searchTextField.accessibilityIdentifier = "SearchTextField" /// for UI testing
+        searchTextField.accessibilityIdentifier = kSearchTextFieldIdentifier /// for UI testing
         addDoneButtonToSearchKeyboard()
     }
     
@@ -162,8 +172,8 @@ class DiscoverProductsViewController: UIViewController {
             Height(kSearchTextFieldHeight)
         )
         magnifyingGlassImageView.easy.layout(
-            Width(40),
-            Height(40)
+            Width(kSmallSquareSize),
+            Height(kSmallSquareSize)
         )
         filterButton.easy.layout(
             Width(kSearchTextFieldHeight),
@@ -173,7 +183,7 @@ class DiscoverProductsViewController: UIViewController {
             Top(kMediumPadding).to(searchStackView, .bottom),
             Leading(kMediumPadding),
             Trailing(kMediumPadding),
-            Height(60)
+            Height(kTitleHeight)
         )
         scrollView.easy.layout(
             Top(kSmallPadding).to(titleLabel, .bottom),
@@ -183,7 +193,7 @@ class DiscoverProductsViewController: UIViewController {
         pageControl.easy.layout(
             Top(kSmallPadding).to(scrollView, .bottom),
             CenterX(),
-            Height(40),
+            Height(kSmallSquareSize),
             Bottom(kSmallPadding).to(view.safeAreaLayoutGuide, .bottom)
         )
         activityIndicator.easy.layout(
@@ -221,7 +231,7 @@ class DiscoverProductsViewController: UIViewController {
             xOffset += pageWidth
 
             /// Additional setup for productCardView...
-            productCardView.layer.cornerRadius = kCornerRadius
+            productCardView.layer.cornerRadius = kDefaultCornerRadius
             productCardView.contentMode = .scaleAspectFit
             productCardView.isUserInteractionEnabled = true
             let tapGestureRecognizer = UITapGestureRecognizer(target: self,
@@ -271,19 +281,19 @@ class DiscoverProductsViewController: UIViewController {
         let doneToolbar: UIToolbar = UIToolbar(frame: CGRect.init(x: 0,
                                                                   y: 0,
                                                                   width: UIScreen.main.bounds.width,
-                                                                  height: 50))
+                                                                  height: kToolbarHeight))
         /// Customize the toolbar appearance
         doneToolbar.barStyle = .default
         doneToolbar.barTintColor = UIColor.darkGray /// Background color
         doneToolbar.tintColor = UIColor.white /// Tint color of the button
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneBarButton: UIBarButtonItem = UIBarButtonItem(title: "Done",
+        let doneBarButton: UIBarButtonItem = UIBarButtonItem(title: kDoneTitle,
                                                              style: .done,
                                                              target: self,
                                                              action: #selector(self.doneButtonAction))
         /// Set custom font and color for the "Done" button
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: AppFonts.helveticaNeue(ofSize: 16),
+            .font: AppFonts.helveticaNeue(ofSize: kRegularFontSize),
             .foregroundColor: UIColor.white
         ]
         doneBarButton.setTitleTextAttributes(attributes, for: .normal)

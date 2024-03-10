@@ -27,14 +27,14 @@ class ProductDetailViewController: UIViewController {
         let productImageView = UIImageView()
         productImageView.contentMode = .scaleAspectFit
         productImageView.clipsToBounds = true
-        productImageView.layer.cornerRadius = kCornerRadius
+        productImageView.layer.cornerRadius = kDefaultCornerRadius
         productImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         return productImageView
     }()
     
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font =  AppFonts.helveticaNeue(ofSize: 18, weight: .bold)
+        titleLabel.font =  AppFonts.helveticaNeue(ofSize: kMediumFontSize, weight: .bold)
         titleLabel.textColor = .black
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
@@ -43,7 +43,7 @@ class ProductDetailViewController: UIViewController {
     
     private let descriptionLabel: UILabel = {
         let descriptionLabel = UILabel()
-        descriptionLabel.font = AppFonts.helveticaNeue(ofSize: 14)
+        descriptionLabel.font = AppFonts.helveticaNeue(ofSize: kSmallFontSize)
         descriptionLabel.textColor = .darkGray
         descriptionLabel.numberOfLines = 0
         descriptionLabel.lineBreakMode = .byWordWrapping
@@ -52,7 +52,7 @@ class ProductDetailViewController: UIViewController {
     
     private let priceLabel: UILabel = {
         let priceLabel = UILabel()
-        priceLabel.font = AppFonts.helveticaNeue(ofSize: 24, weight: .bold)
+        priceLabel.font = AppFonts.helveticaNeue(ofSize: kLargeFontSize, weight: .bold)
         priceLabel.textColor = .black
         priceLabel.textAlignment = .right
         return priceLabel
@@ -60,14 +60,14 @@ class ProductDetailViewController: UIViewController {
     
     private let ratingLabel: UILabel = {
         let ratingLabel = UILabel()
-        ratingLabel.font = AppFonts.helveticaNeue(ofSize: 16)
+        ratingLabel.font = AppFonts.helveticaNeue(ofSize: kRegularFontSize)
         ratingLabel.textColor = .black
         return ratingLabel
     }()
     
     private let ratingCountLabel: UILabel = {
         let ratingLabel = UILabel()
-        ratingLabel.font = AppFonts.helveticaNeue(ofSize: 16)
+        ratingLabel.font = AppFonts.helveticaNeue(ofSize: kRegularFontSize)
         ratingLabel.textColor = .gray
         return ratingLabel
     }()
@@ -85,9 +85,9 @@ class ProductDetailViewController: UIViewController {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = kCornerRadius
+        imageView.layer.cornerRadius = kDefaultCornerRadius
         imageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        imageView.image = UIImage(systemName: "star.fill")
+        imageView.image = AppImages.starFilled
         imageView.tintColor = .AmazonaDeepYellow
         return imageView
     }()
@@ -95,7 +95,7 @@ class ProductDetailViewController: UIViewController {
     private let categoryLabel: UILabel = {
        let categoryLabel = UILabel()
         categoryLabel.textColor = .white
-        categoryLabel.font = AppFonts.helveticaNeue(ofSize: 16)
+        categoryLabel.font = AppFonts.helveticaNeue(ofSize: kRegularFontSize)
         categoryLabel.textAlignment = .center
         return categoryLabel
     }()
@@ -103,7 +103,7 @@ class ProductDetailViewController: UIViewController {
     private let categoryContainerView: UIView = {
         let categoryContainerView = UIView()
         categoryContainerView.backgroundColor = .AmazonaMagenta
-        categoryContainerView.layer.cornerRadius = 14
+        categoryContainerView.layer.cornerRadius = kDefaultCornerRadius
         categoryContainerView.clipsToBounds = true
         return categoryContainerView
     }()
@@ -119,16 +119,16 @@ class ProductDetailViewController: UIViewController {
     
     private let buyNowButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Buy Now", for: .normal)
+        button.setTitle(kBuyNowTitle, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = AppFonts.helveticaNeue(ofSize: 18, weight: .bold)
+        button.titleLabel?.font = AppFonts.helveticaNeue(ofSize: kMediumFontSize, weight: .bold)
         button.backgroundColor = UIColor.AmazonaVibrantGreen
-        button.layer.cornerRadius = 25
+        button.layer.cornerRadius = kBuyNowCornerRadius
         /// apply shadow
         button.layer.shadowColor = UIColor.darkGray.cgColor
-        button.layer.shadowOffset = CGSize(width: 0, height: 5)
-        button.layer.shadowRadius = 5
-        button.layer.shadowOpacity = 0.3
+        button.layer.shadowOffset = CGSize(width: 0, height: kShadowHeight)
+        button.layer.shadowRadius = kShadowRadius
+        button.layer.shadowOpacity = kShadowOpacity
         button.layer.masksToBounds = false
         /// enable autolayout - using easy peasy library
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -143,7 +143,7 @@ class ProductDetailViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(kInitNotImplementedErrorMessage)
     }
     
     // MARK: - Lifecycle
@@ -249,7 +249,7 @@ class ProductDetailViewController: UIViewController {
             Top(kMediumPadding).to(bottomStackView, .bottom),
             Leading(kSmallPadding),
             Trailing(kSmallPadding),
-            Height(50),
+            Height(kBuyNowButtonHeight),
             Bottom(kMediumPadding).to(contentView, .bottom) // This is crucial
         )
     }
@@ -259,7 +259,7 @@ class ProductDetailViewController: UIViewController {
     @MainActor
     private func configureProduct() {
         titleLabel.text = product.title
-        priceLabel.text = "\(product.price.formatted(.currency(code: "EUR")))"
+        priceLabel.text = "\(product.price.formatted(.currency(code: kEuroCurrencyCode)))"
         descriptionLabel.text = product.descriptionText
         ratingLabel.text = "\(product.rating?.rate ?? 0)"
         ratingCountLabel.text = "(\(product.rating?.count ?? 0) ratings)"

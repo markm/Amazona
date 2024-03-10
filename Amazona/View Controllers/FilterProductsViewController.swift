@@ -8,7 +8,6 @@
 import UIKit
 import RxSwift
 import RxCocoa
-import RxDataSources
 import EasyPeasy
 
 class FilterProductsViewController: UIViewController {
@@ -33,18 +32,18 @@ class FilterProductsViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.text = "Filters"
+        titleLabel.text = kFiltersTitle
         titleLabel.textColor = .black
-        titleLabel.font = AppFonts.helveticaNeue(ofSize: 16)
+        titleLabel.font = AppFonts.helveticaNeue(ofSize: kRegularFontSize)
         titleLabel.textAlignment = .center
         return titleLabel
     }()
     
     private let categoriesLabel: UILabel = {
         let categoriesLabel = UILabel()
-        categoriesLabel.text = "CATEGORIES"
+        categoriesLabel.text = kCategoriesTitle
         categoriesLabel.textColor = .AmazonaGrey
-        categoriesLabel.font = AppFonts.helveticaNeue(ofSize: 16)
+        categoriesLabel.font = AppFonts.helveticaNeue(ofSize: kRegularFontSize)
         categoriesLabel.textAlignment = .left
         return categoriesLabel
     }()
@@ -59,9 +58,9 @@ class FilterProductsViewController: UIViewController {
     
     private let sortByLabel: UILabel = {
         let sortByLabel = UILabel()
-        sortByLabel.text = "SORT BY"
+        sortByLabel.text = kSortByLabelTitle
         sortByLabel.textColor = .AmazonaGrey
-        sortByLabel.font = AppFonts.helveticaNeue(ofSize: 16)
+        sortByLabel.font = AppFonts.helveticaNeue(ofSize: kRegularFontSize)
         sortByLabel.textAlignment = .left
         return sortByLabel
     }()
@@ -74,14 +73,14 @@ class FilterProductsViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(kInitNotImplementedErrorMessage)
     }
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Filter"
+        title = kFilterTitle
         view.backgroundColor = .white
         setupButtons()
         setupCollectionView()
@@ -92,17 +91,17 @@ class FilterProductsViewController: UIViewController {
     // MARK: - Setup Methods for UI Elements
     
     private func setupResetButton() {
-        resetButton.setTitle("Reset", for: .normal)
+        resetButton.setTitle(kResetTitle, for: .normal)
         resetButton.setTitleColor(.AmazonaMagenta, for: .normal)
-        resetButton.titleLabel?.font = AppFonts.helveticaNeue(ofSize: 16)
+        resetButton.titleLabel?.font = AppFonts.helveticaNeue(ofSize: kRegularFontSize)
         resetButton.contentHorizontalAlignment = .left
         resetButton.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
     }
     
     private func setupDoneButton() {
-        doneButton.setTitle("Done", for: .normal)
+        doneButton.setTitle(kDoneTitle, for: .normal)
         doneButton.setTitleColor(.AmazonaDarkBlue, for: .normal)
-        doneButton.titleLabel?.font = AppFonts.helveticaNeue(ofSize: 16)
+        doneButton.titleLabel?.font = AppFonts.helveticaNeue(ofSize: kRegularFontSize)
         doneButton.contentHorizontalAlignment = .right
         doneButton.addTarget(self, action: #selector(doneButtonTapped), for: .touchUpInside)
     }
@@ -123,7 +122,6 @@ class FilterProductsViewController: UIViewController {
     private func setupSortOptionsTableView() {
         sortOptionsTableView.delegate = self
         sortOptionsTableView.dataSource = self
-        sortOptionsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
         sortOptionsTableView.tableFooterView = UIView()  /// Remove unused separators
         sortOptionsTableView.register(UITableViewCell.self, forCellReuseIdentifier: kSortOptionCellIdentifier)
 
@@ -166,7 +164,7 @@ class FilterProductsViewController: UIViewController {
             Top(kMediumPadding).to(topStackView, .bottom),
             Leading(),
             Trailing(),
-            Height(1)
+            Height(kBorderWidth)
         )
         categoriesLabel.easy.layout(
             Top(kMediumPadding).to(horizontalSeperatorView, .bottom),
@@ -206,8 +204,10 @@ class FilterProductsViewController: UIViewController {
 
 extension FilterProductsViewController: UICollectionViewDataSource {
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: kCategoryCellIdentifier, for: indexPath) as! CategoryCell
+    func collectionView(_ collectionView: UICollectionView, 
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: kCategoryCellIdentifier,
+                                                      for: indexPath) as! CategoryCell
         let category = viewModel.categories[indexPath.item]
         cell.configure(with: category)
         cell.delegate = self
@@ -228,8 +228,9 @@ extension FilterProductsViewController: UICollectionViewDelegateFlowLayout {
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let category = viewModel.categories[indexPath.item]
         /// get the width of the string, essentially, and add some padding
-        let width = category.name.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)]).width + 20
-        return CGSize(width: width, height: 40)
+        let attributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: kRegularFontSize)]
+        let width = category.name.size(withAttributes: attributes).width + 20
+        return CGSize(width: width, height: kSmallSquareSize)
     }
 }
 

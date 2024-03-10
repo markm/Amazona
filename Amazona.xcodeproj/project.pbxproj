@@ -11,6 +11,7 @@
 		A03AB91D2B95AF8E0044E3D4 /* AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB91C2B95AF8E0044E3D4 /* AppFonts.swift */; };
 		A03AB91F2B95BF820044E3D4 /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB91E2B95BF820044E3D4 /* ProductDetailViewController.swift */; };
 		A0731ED72B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0731ED62B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift */; };
+		A0731ED92B9E62B300AADA11 /* AppImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0731ED82B9E62B300AADA11 /* AppImages.swift */; };
 		A09647302B967B2C004D8A60 /* DiscoverProductsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A096472F2B967B2C004D8A60 /* DiscoverProductsViewController.swift */; };
 		A09700CF2B9A45220042AF2F /* MockProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09700CE2B9A45220042AF2F /* MockProductService.swift */; };
 		A0AFC2F52B93E4E70004D0E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC2F42B93E4E70004D0E0 /* AppDelegate.swift */; };
@@ -62,6 +63,7 @@
 		A03AB91C2B95AF8E0044E3D4 /* AppFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFonts.swift; sourceTree = "<group>"; };
 		A03AB91E2B95BF820044E3D4 /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
 		A0731ED62B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ErrorHandling.swift"; sourceTree = "<group>"; };
+		A0731ED82B9E62B300AADA11 /* AppImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImages.swift; sourceTree = "<group>"; };
 		A096472F2B967B2C004D8A60 /* DiscoverProductsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverProductsViewController.swift; sourceTree = "<group>"; };
 		A09700CE2B9A45220042AF2F /* MockProductService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockProductService.swift; sourceTree = "<group>"; };
 		A0AFC2F12B93E4E70004D0E0 /* Amazona.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Amazona.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -213,6 +215,7 @@
 				A03AB91C2B95AF8E0044E3D4 /* AppFonts.swift */,
 				A0BAF69F2B98566000DF920D /* Protocols.swift */,
 				A0BAF6A12B98F16A00DF920D /* Enums.swift */,
+				A0731ED82B9E62B300AADA11 /* AppImages.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -403,6 +406,7 @@
 				A0AFC3452B93F2750004D0E0 /* ProductsViewModel.swift in Sources */,
 				A0AFC33D2B93E8A40004D0E0 /* Product.swift in Sources */,
 				A0BAF6982B97DF2600DF920D /* FilterProductsViewController.swift in Sources */,
+				A0731ED92B9E62B300AADA11 /* AppImages.swift in Sources */,
 				A0AFC3472B9403E90004D0E0 /* Constants.swift in Sources */,
 				A0BAF6A02B98566000DF920D /* Protocols.swift in Sources */,
 				A0BAF6A22B98F16A00DF920D /* Enums.swift in Sources */,

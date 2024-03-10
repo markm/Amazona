@@ -16,14 +16,14 @@ class ProductCardView: UIView {
         let productImageView = UIImageView()
         productImageView.contentMode = .scaleAspectFit
         productImageView.clipsToBounds = true
-        productImageView.layer.cornerRadius = kCornerRadius
+        productImageView.layer.cornerRadius = kDefaultCornerRadius
         productImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         return productImageView
     }()
     
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font =  AppFonts.helveticaNeue(ofSize: 18, weight: .bold)
+        titleLabel.font =  AppFonts.helveticaNeue(ofSize: kMediumFontSize, weight: .bold)
         titleLabel.textColor = .black
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
@@ -32,7 +32,7 @@ class ProductCardView: UIView {
     
     private let descriptionLabel: UILabel = {
         let descriptionLabel = UILabel()
-        descriptionLabel.font = AppFonts.helveticaNeue(ofSize: 14)
+        descriptionLabel.font = AppFonts.helveticaNeue(ofSize: kSmallFontSize)
         descriptionLabel.textColor = .darkGray
         descriptionLabel.numberOfLines = 2
         descriptionLabel.lineBreakMode = .byWordWrapping
@@ -41,7 +41,7 @@ class ProductCardView: UIView {
     
     private let priceLabel: UILabel = {
         let priceLabel = UILabel()
-        priceLabel.font = AppFonts.helveticaNeue(ofSize: 24, weight: .bold)
+        priceLabel.font = AppFonts.helveticaNeue(ofSize: kLargeFontSize, weight: .bold)
         priceLabel.textColor = .black
         priceLabel.textAlignment = .right
         return priceLabel
@@ -49,14 +49,14 @@ class ProductCardView: UIView {
     
     private let ratingLabel: UILabel = {
         let ratingLabel = UILabel()
-        ratingLabel.font = AppFonts.helveticaNeue(ofSize: 16)
+        ratingLabel.font = AppFonts.helveticaNeue(ofSize: kRegularFontSize)
         ratingLabel.textColor = .black
         return ratingLabel
     }()
     
     private let ratingCountLabel: UILabel = {
         let ratingLabel = UILabel()
-        ratingLabel.font = AppFonts.helveticaNeue(ofSize: 16)
+        ratingLabel.font = AppFonts.helveticaNeue(ofSize: kRegularFontSize)
         ratingLabel.textColor = .gray
         return ratingLabel
     }()
@@ -74,9 +74,9 @@ class ProductCardView: UIView {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = kCornerRadius
+        imageView.layer.cornerRadius = kDefaultCornerRadius
         imageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        imageView.image = UIImage(systemName: "star.fill")
+        imageView.image = AppImages.starFilled
         imageView.tintColor = .AmazonaDeepYellow
         return imageView
     }()
@@ -84,7 +84,7 @@ class ProductCardView: UIView {
     private let categoryLabel: UILabel = {
        let categoryLabel = UILabel()
         categoryLabel.textColor = .white
-        categoryLabel.font = AppFonts.helveticaNeue(ofSize: 16)
+        categoryLabel.font = AppFonts.helveticaNeue(ofSize: kRegularFontSize)
         categoryLabel.textAlignment = .center
         return categoryLabel
     }()
@@ -92,7 +92,7 @@ class ProductCardView: UIView {
     private let categoryContainerView: UIView = {
         let categoryContainerView = UIView()
         categoryContainerView.backgroundColor = .AmazonaMagenta
-        categoryContainerView.layer.cornerRadius = 14
+        categoryContainerView.layer.cornerRadius = kDefaultCornerRadius
         categoryContainerView.clipsToBounds = true
         return categoryContainerView
     }()
@@ -118,7 +118,7 @@ class ProductCardView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(kInitNotImplementedErrorMessage)
     }
     
     // MARK: - Setup Methods for UI Elements
@@ -197,17 +197,17 @@ class ProductCardView: UIView {
     
     private func configureCardBorder() {
         layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.5
-        layer.shadowOffset = CGSize(width: 0, height: 2)
-        layer.shadowRadius = 5
-        layer.cornerRadius = kCornerRadius
+        layer.shadowOpacity = kShadowOpacity
+        layer.shadowOffset = CGSize(width: 0, height: kShadowHeight)
+        layer.shadowRadius = kShadowRadius
+        layer.cornerRadius = kDefaultCornerRadius
         layer.masksToBounds = false /// Important for shadows
     }
     
     @MainActor
     private func configure(with product: Product) {
         titleLabel.text = product.title
-        priceLabel.text = "\(product.price.formatted(.currency(code: "EUR")))"
+        priceLabel.text = "\(product.price.formatted(.currency(code: kEuroCurrencyCode)))"
         descriptionLabel.text = product.descriptionText
         ratingLabel.text = "\(product.rating?.rate ?? 0)"
         ratingCountLabel.text = "(\(product.rating?.count ?? 0) ratings)"
