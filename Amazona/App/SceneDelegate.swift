@@ -17,7 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         /// Set up the window and root view controller
         window = UIWindow(windowScene: windowScene)
         let navController = UINavigationController()
-        let discoverProductsViewController = DiscoverProductsViewController()
+        let productViewModel = ProductsViewModel(productService: ProductService())
+        let discoverProductsViewController = DiscoverProductsViewController(viewModel: productViewModel)
         navController.viewControllers = [discoverProductsViewController]
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
