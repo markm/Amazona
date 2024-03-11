@@ -35,7 +35,7 @@ class ProductDetailViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font =  AppFonts.helveticaNeue(ofSize: kMediumFontSize, weight: .bold)
+        titleLabel.font = AppFonts.helveticaNeue(ofSize: kMediumFontSize, weight: .bold)
         titleLabel.textColor = .black
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
@@ -194,12 +194,10 @@ class ProductDetailViewController: UIViewController {
             Edges(),
             Width().like(view)
         )
-
         contentView.easy.layout(
             Edges(),
             Width().like(scrollView)
         )
-        
         productImageView.easy.layout(
             Top(kMediumPadding).to(contentView.safeAreaLayoutGuide, .top),
             CenterX(),
@@ -207,49 +205,41 @@ class ProductDetailViewController: UIViewController {
             Leading(kMediumPadding).to(contentView.safeAreaLayoutGuide, .leading),
             Trailing(kMediumPadding).to(contentView.safeAreaLayoutGuide, .trailing)
         )
-        
         titleLabel.easy.layout(
             Top(kMediumPadding).to(productImageView, .bottom),
             CenterX(),
             Leading(kMediumPadding).to(contentView.safeAreaLayoutGuide, .leading),
             Trailing(kMediumPadding).to(contentView.safeAreaLayoutGuide, .trailing)
         )
-        
         descriptionLabel.easy.layout(
             Top(kSmallPadding).to(titleLabel, .bottom),
             CenterX(),
             Leading(kMediumPadding).to(contentView.safeAreaLayoutGuide, .leading),
             Trailing(kMediumPadding).to(contentView.safeAreaLayoutGuide, .trailing)
         )
-        
         ratingStackView.easy.layout(
             Top(kSmallPadding).to(descriptionLabel, .bottom),
             Leading(kMediumPadding)
         )
-        
         bottomStackView.easy.layout(
-            Leading(kSmallPadding),
-            Trailing(kSmallPadding),
+            Leading(kMediumPadding),
+            Trailing(kMediumPadding),
             Top(kMediumPadding).to(ratingStackView, .bottom)
         )
-        
         categoryContainerView.easy.layout(
             Height().like(bottomStackView),
             Width(*0.5).like(bottomStackView)
         )
-        
         categoryLabel.easy.layout(
             Center()
         )
-        
         priceLabel.easy.layout(
             Height().like(bottomStackView)
         )
-        
         buyNowButton.easy.layout(
             Top(kMediumPadding).to(bottomStackView, .bottom),
-            Leading(kSmallPadding),
-            Trailing(kSmallPadding),
+            Leading(kMediumPadding),
+            Trailing(kMediumPadding),
             Height(kBuyNowButtonHeight),
             Bottom(kMediumPadding).to(contentView, .bottom) // This is crucial
         )
