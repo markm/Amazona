@@ -74,3 +74,22 @@ enum SerializationError: LocalizedError {
         }
     }
 }
+
+enum ImageError: LocalizedError {
+    
+    case failedToLoadImage
+    
+    var failureReason: String? {
+        switch self {
+        case .failedToLoadImage:
+            return "Failed to Load Image"
+        }
+    }
+    
+    var recoverSuggestion: String? {
+        switch self {
+        case .failedToLoadImage:
+            return "Check the URL and try again"
+        }
+    }
+}

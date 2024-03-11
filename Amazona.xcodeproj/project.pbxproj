@@ -12,6 +12,8 @@
 		A03AB91F2B95BF820044E3D4 /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB91E2B95BF820044E3D4 /* ProductDetailViewController.swift */; };
 		A0731ED72B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0731ED62B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift */; };
 		A0731ED92B9E62B300AADA11 /* AppImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0731ED82B9E62B300AADA11 /* AppImages.swift */; };
+		A0731EDC2B9E856C00AADA11 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = A0731EDB2B9E856C00AADA11 /* Kingfisher */; };
+		A0731EDE2B9E8CC000AADA11 /* UIImageView+Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0731EDD2B9E8CC000AADA11 /* UIImageView+Kingfisher.swift */; };
 		A09647302B967B2C004D8A60 /* DiscoverProductsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A096472F2B967B2C004D8A60 /* DiscoverProductsViewController.swift */; };
 		A09700CF2B9A45220042AF2F /* MockProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09700CE2B9A45220042AF2F /* MockProductService.swift */; };
 		A0AFC2F52B93E4E70004D0E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC2F42B93E4E70004D0E0 /* AppDelegate.swift */; };
@@ -64,6 +66,7 @@
 		A03AB91E2B95BF820044E3D4 /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
 		A0731ED62B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ErrorHandling.swift"; sourceTree = "<group>"; };
 		A0731ED82B9E62B300AADA11 /* AppImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImages.swift; sourceTree = "<group>"; };
+		A0731EDD2B9E8CC000AADA11 /* UIImageView+Kingfisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Kingfisher.swift"; sourceTree = "<group>"; };
 		A096472F2B967B2C004D8A60 /* DiscoverProductsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverProductsViewController.swift; sourceTree = "<group>"; };
 		A09700CE2B9A45220042AF2F /* MockProductService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockProductService.swift; sourceTree = "<group>"; };
 		A0AFC2F12B93E4E70004D0E0 /* Amazona.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Amazona.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,6 +101,7 @@
 			files = (
 				A0AFC32F2B93E6FD0004D0E0 /* Differentiator in Frameworks */,
 				A0AFC32C2B93E69B0004D0E0 /* Alamofire in Frameworks */,
+				A0731EDC2B9E856C00AADA11 /* Kingfisher in Frameworks */,
 				A0AFC3292B93E6550004D0E0 /* RealmSwift in Frameworks */,
 				A0AFC3342B93E7CC0004D0E0 /* EasyPeasy in Frameworks */,
 				A0AFC3312B93E6FD0004D0E0 /* RxDataSources in Frameworks */,
@@ -233,6 +237,7 @@
 			children = (
 				A0AFC3492B940AA00004D0E0 /* UIColor+CustomColors.swift */,
 				A0731ED62B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift */,
+				A0731EDD2B9E8CC000AADA11 /* UIImageView+Kingfisher.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -269,6 +274,7 @@
 				A0AFC32E2B93E6FD0004D0E0 /* Differentiator */,
 				A0AFC3302B93E6FD0004D0E0 /* RxDataSources */,
 				A0AFC3332B93E7CC0004D0E0 /* EasyPeasy */,
+				A0731EDB2B9E856C00AADA11 /* Kingfisher */,
 			);
 			productName = Amazona;
 			productReference = A0AFC2F12B93E4E70004D0E0 /* Amazona.app */;
@@ -347,6 +353,7 @@
 				A0AFC32A2B93E69B0004D0E0 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				A0AFC32D2B93E6FD0004D0E0 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				A0AFC3322B93E7CC0004D0E0 /* XCRemoteSwiftPackageReference "EasyPeasy" */,
+				A0731EDA2B9E856C00AADA11 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = A0AFC2F22B93E4E70004D0E0 /* Products */;
 			projectDirPath = "";
@@ -398,6 +405,7 @@
 				A0AFC3412B93E8DF0004D0E0 /* Errors.swift in Sources */,
 				A0BAF69D2B98523300DF920D /* Category.swift in Sources */,
 				A0AFC2F72B93E4E70004D0E0 /* SceneDelegate.swift in Sources */,
+				A0731EDE2B9E8CC000AADA11 /* UIImageView+Kingfisher.swift in Sources */,
 				A09700CF2B9A45220042AF2F /* MockProductService.swift in Sources */,
 				A0AFC33A2B93E8820004D0E0 /* ProductService.swift in Sources */,
 				A0731ED72B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift in Sources */,
@@ -755,6 +763,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		A0731EDA2B9E856C00AADA11 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		A0AFC3252B93E6550004D0E0 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -790,6 +806,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		A0731EDB2B9E856C00AADA11 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A0731EDA2B9E856C00AADA11 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		A0AFC3262B93E6550004D0E0 /* Realm */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A0AFC3252B93E6550004D0E0 /* XCRemoteSwiftPackageReference "realm-swift" */;

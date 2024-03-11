@@ -212,18 +212,10 @@ class ProductCardView: UIView {
         ratingLabel.text = "\(product.rating?.rate ?? 0)"
         ratingCountLabel.text = "(\(product.rating?.count ?? 0) ratings)"
         categoryLabel.text = product.category
-        
-        /// Load image from URL
-        if let imageURL = URL(string: product.imageURLString) {
-            URLSession.shared.dataTask(with: imageURL) { (data, _, error) in
-                if let data {
-                    DispatchQueue.main.async {
-                        self.productImageView.image = UIImage(data: data)
-                    }
-                } else if let error {
-                    print("Error loading image: \(error.localizedDescription)")
-                }
-            }.resume()
+        productImageView.setImage(withURL: product.imageURL) { error in
+            if let error {
+                print("Error loading image: \(error.localizedDescription)")
+            }
         }
     }
 }

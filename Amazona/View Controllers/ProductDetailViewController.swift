@@ -7,6 +7,7 @@
 
 import UIKit
 import EasyPeasy
+import Kingfisher
 
 class ProductDetailViewController: UIViewController {
     
@@ -264,19 +265,10 @@ class ProductDetailViewController: UIViewController {
         ratingLabel.text = "\(product.rating?.rate ?? 0)"
         ratingCountLabel.text = "(\(product.rating?.count ?? 0) ratings)"
         categoryLabel.text = product.category
-        
-        /// Load image from URL
-        if let imageURL = URL(string: product.imageURLString) {
-            URLSession.shared.dataTask(with: imageURL) { (data, _, error) in
-                DispatchQueue.main.async {
-                    if let data = data {
-                        self.productImageView.image = UIImage(data: data)
-                    } else if let error {
-                        print("Error loading image: \(error.localizedDescription)")
-                        self.showErrorAlert(error)
-                    }
-                }
-            }.resume()
+        productImageView.setImage(withURL: product.imageURL) { [weak self] error in
+            if let error {
+                self?.showErrorAlert(error)
+            }
         }
     }
 

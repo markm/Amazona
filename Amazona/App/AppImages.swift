@@ -22,4 +22,8 @@ struct AppImages {
     static var starFilled: UIImage? {
         UIImage(systemName: "star.fill")
     }
+    
+    static var launch: UIImage? {
+        UIImage(named: "launch")
+    }
 }

@@ -18,6 +18,8 @@ class Product: Object, Decodable, Comparable {
     @Persisted var imageURLString: String = ""
     @Persisted var rating: Rating?
     
+    var imageURL: URL? { URL(string: imageURLString) }
+    
     enum CodingKeys: String, CodingKey {
         case id
         case title
