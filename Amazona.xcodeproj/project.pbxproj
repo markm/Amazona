@@ -14,8 +14,9 @@
 		A0731ED92B9E62B300AADA11 /* AppImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0731ED82B9E62B300AADA11 /* AppImages.swift */; };
 		A0731EDC2B9E856C00AADA11 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = A0731EDB2B9E856C00AADA11 /* Kingfisher */; };
 		A0731EDE2B9E8CC000AADA11 /* UIImageView+Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0731EDD2B9E8CC000AADA11 /* UIImageView+Kingfisher.swift */; };
+		A0731EDF2B9ED50500AADA11 /* MockProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09700CE2B9A45220042AF2F /* MockProductService.swift */; };
+		A0731EE12B9ED56200AADA11 /* MockProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0731EE02B9ED56200AADA11 /* MockProducts.swift */; };
 		A09647302B967B2C004D8A60 /* DiscoverProductsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A096472F2B967B2C004D8A60 /* DiscoverProductsViewController.swift */; };
-		A09700CF2B9A45220042AF2F /* MockProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09700CE2B9A45220042AF2F /* MockProductService.swift */; };
 		A0AFC2F52B93E4E70004D0E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC2F42B93E4E70004D0E0 /* AppDelegate.swift */; };
 		A0AFC2F72B93E4E70004D0E0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0AFC2F62B93E4E70004D0E0 /* SceneDelegate.swift */; };
 		A0AFC2FE2B93E4E80004D0E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0AFC2FD2B93E4E80004D0E0 /* Assets.xcassets */; };
@@ -67,6 +68,7 @@
 		A0731ED62B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ErrorHandling.swift"; sourceTree = "<group>"; };
 		A0731ED82B9E62B300AADA11 /* AppImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImages.swift; sourceTree = "<group>"; };
 		A0731EDD2B9E8CC000AADA11 /* UIImageView+Kingfisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Kingfisher.swift"; sourceTree = "<group>"; };
+		A0731EE02B9ED56200AADA11 /* MockProducts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockProducts.swift; sourceTree = "<group>"; };
 		A096472F2B967B2C004D8A60 /* DiscoverProductsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverProductsViewController.swift; sourceTree = "<group>"; };
 		A09700CE2B9A45220042AF2F /* MockProductService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockProductService.swift; sourceTree = "<group>"; };
 		A0AFC2F12B93E4E70004D0E0 /* Amazona.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Amazona.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -166,7 +168,9 @@
 		A0AFC30A2B93E4E80004D0E0 /* AmazonaTests */ = {
 			isa = PBXGroup;
 			children = (
+				A09700CE2B9A45220042AF2F /* MockProductService.swift */,
 				A0AFC30B2B93E4E80004D0E0 /* AmazonaTests.swift */,
+				A0731EE02B9ED56200AADA11 /* MockProducts.swift */,
 			);
 			path = AmazonaTests;
 			sourceTree = "<group>";
@@ -196,7 +200,6 @@
 				A0AFC3392B93E8820004D0E0 /* ProductService.swift */,
 				A0AFC33E2B93E8C60004D0E0 /* Endpoint.swift */,
 				A0AFC3402B93E8DF0004D0E0 /* Errors.swift */,
-				A09700CE2B9A45220042AF2F /* MockProductService.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -406,7 +409,6 @@
 				A0BAF69D2B98523300DF920D /* Category.swift in Sources */,
 				A0AFC2F72B93E4E70004D0E0 /* SceneDelegate.swift in Sources */,
 				A0731EDE2B9E8CC000AADA11 /* UIImageView+Kingfisher.swift in Sources */,
-				A09700CF2B9A45220042AF2F /* MockProductService.swift in Sources */,
 				A0AFC33A2B93E8820004D0E0 /* ProductService.swift in Sources */,
 				A0731ED72B9AEBB600AADA11 /* UIViewController+ErrorHandling.swift in Sources */,
 				A03AB91B2B959A870044E3D4 /* ProductCardView.swift in Sources */,
@@ -427,6 +429,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0AFC30C2B93E4E80004D0E0 /* AmazonaTests.swift in Sources */,
+				A0731EDF2B9ED50500AADA11 /* MockProductService.swift in Sources */,
+				A0731EE12B9ED56200AADA11 /* MockProducts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

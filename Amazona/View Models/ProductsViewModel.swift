@@ -26,9 +26,9 @@ class ProductsViewModel {
         selectedSortOptionRelay.asObservable()
     }
     
-    private let productsRelay = BehaviorRelay<[Product]>(value: [])
-    private let selectedCategoriesRelay = BehaviorRelay<[Category]>(value: [])
-    private let selectedSortOptionRelay = BehaviorRelay<ProductSortOption?>(value: nil)
+    let productsRelay = BehaviorRelay<[Product]>(value: [])
+    let selectedCategoriesRelay = BehaviorRelay<[Category]>(value: [])
+    let selectedSortOptionRelay = BehaviorRelay<ProductSortOption?>(value: nil)
     
     private let productService: ProductServiceProtocol
     private var lastSelectedSortOption: ProductSortOption?
