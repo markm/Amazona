@@ -1,4 +1,4 @@
-iOS Project for Ebiscon
+iOS Project for Ebiscon Application
 
 Required Libraries: 
 UIKit without storyboards. EasyPeasy. RealmSwift. Alamofire. RxSwift. 
